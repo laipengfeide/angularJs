@@ -1,0 +1,37 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.insSearch,.insSearchCont,.reported,.dateCont,.listCont {width:100%; float:left;}
+.insSearchCont{border:1px solid #0B7EA2;border-radius:1px;overflow: auto;}
+.tableCont {width:-webkit-calc(100% - 280px); width:-moz-calc(100% - 280px); width:calc(100% - 280px);overflow:hidden; border-left:1px solid #0ECBF9;}
+.tableBox{width:-webkit-calc(100% - 310px); width:-moz-calc(100% - 310px); width:calc(100% - 310px);overflow:hidden; border-left:1px solid #0ECBF9;position:relative;}
+
+.table tr th,.table tr td {width:28%;}
+.table tr .oper {width:15%; min-width:100px;}
+
+.tableCont .table>thead:first-child>tr:first-child>th:first-child,.tableCont .table>tbody>tr>td:first-child {text-align:center;}
+.panel-content{padding:0 4px;}
+.dateTitle {margin:0 20px 0; float:left;}
+.dateTitle a {display:inline-block; width:20px; height:20px; float:left; margin:35px 0 0; vertical-align:bottom; transition:none;}
+.dateTitle a.prev {background-position:-550px 0; margin-right:15px;}
+.dateTitle a.next {background-position:-570px 0; margin-left:15px;}
+.dateTitle a.prev:hover {background-position:-550px -20px;}
+.dateTitle a.next:hover {background-position:-570px -20px;}
+.dateTitle p {float:left; margin: 0;}
+
+.reported {width:-webkit-calc(100% - 10px); width:-moz-calc(100% - 10px); width:calc(100% - 10px); margin-left:11px;height:calc(100% - 100px); top:90px; border:none;}
+.dateCont {height:calc(100% - 97px);overflow-x:hidden;overflow-y:auto; }
+.gpsList .tableCont {width:-webkit-calc(100% - 12px); width:-moz-calc(100% - 12px); width:calc(100% - 12px); margin-left: 12px; border: none;}
+.table>thead:first-child>tr:first-child>th {background-color:#08597D;}
+.dateCont .table {border:1px solid #0ECBF9;}
+.dateCont .table tr td,.dateCont .table tr th {width:14.3%; border-color:#0ECBF9; text-align:left; border-left:1px  solid #0ECBF9;}
+.dateCont .table tr th {line-height:40px; padding-left: 20px;}
+.dateCont .table tr td {height:116px; padding-top:20px; padding-left:20px;}
+.dateCont .table tr td .panel-title {font-size:16px;}
+
+.gpsList {}
+.gpsList .table tr th,.gpsList .table tr td {width:15%; text-align:center; vertical-align:middle;}
+.gpsList .table tr .oper {width:10%;}
+.gpsList .table tr .address {width:35%;}
+.gpsList .table tr .address p {text-align:left; margin:0; line-height:24px;}
+.gpsList .table tr .pos {width:50px;}

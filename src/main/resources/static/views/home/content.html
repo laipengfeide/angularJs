@@ -1,0 +1,29 @@
+<script type="text/javascript" src="../../js/page/home/home.js">
+</script>
+<div class="page-fluid">
+	<input id="alarmSwitch" type="hidden" value="true" />
+	<div class="showSystem posA" id="showSystem">
+		<div class="systemCont" id="system">
+			<div class="button font14 fl">
+				<a href="#" class="showWin" datatype="editInfo"><i class="icon"></i> 责任网格设置</a>
+				<a href="#">辖区设置</a>
+				<a href="#">机构关联设置</a>
+				<a href="#">分组管理</a>
+				<a href="#">视频管理</a>
+				<a href="#">资源类型设置</a>
+				<a href="#">定位频率设置</a>
+			</div>
+		</div>
+		<div class="systemCont" id="manage">
+			<div class="button font14 fl">
+				<a href="#" class="showWin" datatype="editInfo"><i class="icon"></i> 机构管理</a>
+				<a href="#">角色管理</a>
+				<a href="#">机构类型设置</a>
+				<a href="#">人员类型设置</a>
+			</div>
+		</div>
+		<span class="closed fr" datatype="showSystem"><i></i></span> </div>
+		<div ng-include="'include/home_child/search.html'"></div>
+		<div id="map" style="width: 100%;height:100%;"></div>
+	</div>
+</div>

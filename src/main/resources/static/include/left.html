@@ -1,0 +1,181 @@
+<script type="text/javascript" src="../js/page/left/left.js">
+</script>
+<div class="page-fluid">
+	<div class="logo"> <i class="icon"></i>
+		<h1 class="white" title="{{systemTitle}}"><span>{{systemTitle}}</span></h1>
+	</div>
+	<div class="time font20 text-center">2018-2-11 10:50:23</div>
+	<div class="stationTitle white font20"><i class="icon" onclick="moveToCurOrgan();"></i> <span id="titleOrganName">乌鲁木齐市</span></div>
+	<input type="hidden" value="xj-ldgl" id="xj-selected">
+	<div class="nav" id="xjMenu">
+
+		<ul class="font20">
+			<li name="xj-tjfx"><i class="icon"></i>
+				<a href="javaScript:void(0)" onclick="changeClass('xj-zhgl','/pcenter/managerStatisticWeb/gotoManagerStatistics.action');"><i class="icon01"></i><i class="icon02"></i><i class="icon03"></i><i class="icon04"></i><span data-title="统计分析">统计分析</span></a>
+			</li>
+			<li name="xj-ldgl" class="li-hover"><i class="icon"></i>
+				<a href="javaScript:void(0);" onclick="changeClass('xj-ldgl','#!/main');"><i class="icon01"></i><i class="icon02"></i><i class="icon03"></i><i class="icon04"></i><span data-title="警务联动">警务联动</span></a>
+			</li>
+			<li name="xj-jwgl"><i class="icon"></i>
+				<a id="homeJWGL" href="javaScript:void(0)"><i class="icon01"></i><i class="icon02"></i><i class="icon03"></i><i class="icon04"></i><span data-title="警务管理">警务管理</span></a>
+				<div class="sublist">
+					<dl>
+
+						<dd>
+							<a id="homeQWBB" href="javaScript:void(0)" onclick="changeClass('xj-jwgl','/pcenter/cg_duty/gotodutyList.action');">勤务报备</a>
+						</dd>
+
+						<dd>
+							<a href="javaScript:void(0)" onclick="changeClass('xj-jwgl','/pcenter/messeagePublish/gotoMesseagePublishList.action');resetNumber();">通知发布</a>
+						</dd>
+
+					</dl>
+				</div>
+			</li>
+			<li name="xj-jwzy"><i class="icon"></i>
+				<a id="homeJWZY" href="javaScript:void(0)"><i class="icon01"></i><i class="icon02"></i><i class="icon03"></i><i class="icon04"></i><span data-title="警务资源">警务资源</span></a>
+				<div class="sublist">
+					<dl>
+
+						<dd>
+							<a ui-sref="peoplelist({text:'副标题'})" onclick="changeClass('xj-jwzy','#!/peoplelist');">人员管理</a>
+						</dd>
+
+						<dd>
+							<a href="javaScript:void(0)" ng-click="gotoCar()">车辆管理</a>
+						</dd>
+
+						<dd>
+							<a href="javaScript:void(0)" onclick="changeClass('xj-jwzy','/pcenter/gpsWeb/gotoGpsList.action');">定位设备管理</a>
+						</dd>
+
+						<dd>
+							<a href="javaScript:void(0)" onclick="changeClass('xj-jwzy','/pcenter/admin/gotoAlarmDeviceList.action');">报警设备管理</a>
+						</dd>
+
+						<dd>
+							<a href="javaScript:void(0)" onclick="changeClass('xj-jwzy','/pcenter/web/resource/gotoResourceList.action');">地图资源管理</a>
+						</dd>
+
+						<dd>
+							<a href="javaScript:void(0)" onclick="changeClass('xj-jwzy','/pcenter/web/GBPlatForm/toBindGBUser.action');">视频账号管理</a>
+						</dd>
+
+						<dd>
+							<a target="_Blank" style="text-decoration:none" href="javaScript:void(0)" onclick="changeClass('xj-jwzy','http://10.200.1.101:8080/smsplatform/');">报警设备监控</a>
+						</dd>
+
+					</dl>
+				</div>
+			</li>
+
+			<li name="xj-xtsz"><i class="icon"></i>
+				<a id="homeXTSZ" href="javaScript:void(0)"><i class="icon01"></i><i class="icon02"></i><i class="icon03"></i><i class="icon04"></i><span data-title="系统设置">系统设置</span></a>
+				<div class="sublist" style="display: none;">
+					<dl>
+
+						<dd>
+							<a id="homeZRWGSZ" href="javaScript:void(0)" onclick="changeClass('xj-xtsz','/pcenter/web/Area/toArealist.action?areaType=2&amp;n='+Math.random());">责任网格设置</a>
+						</dd>
+
+						<dd>
+							<a id="homeJGGLSE" href="javaScript:void(0)" onclick="changeClass('xj-xtsz','/pcenter/organRelevance/gotoOrganRelevance.action');">机构关联设置</a>
+						</dd>
+
+						<dd>
+							<a id="homeSPDWSZ" href="javaScript:void(0)" onclick="changeClass('xj-xtsz','/pcenter/web/GBPlatForm/initDevice.action');">视频点位设置</a>
+						</dd>
+
+						<dd>
+							<a id="homeRYFZSZ" href="javaScript:void(0)" onclick="changeClass('xj-xtsz','/pcenter/group/gotoGroupList.action');">人员分组设置</a>
+						</dd>
+
+						<dd>
+							<a id="homeSPSBSZ" href="javaScript:void(0)" onclick="changeClass('xj-xtsz','/pcenter/camDeviceEvent/gotoCameraDeviceEvent.action');">视频设备设置</a>
+						</dd>
+
+						<dd>
+							<a id="homeYJQRBJ" href="javaScript:void(0)" onclick="changeClass('xj-xtsz','/pcenter');">一键确认报警</a>
+						</dd>
+
+					</dl>
+				</div>
+			</li>
+
+			<li name="xj-xtgl"><i class="icon"></i>
+				<a id="homeXTGL" href="javaScript:void(0)"><i class="icon01"></i><i class="icon02"></i><i class="icon03"></i><i class="icon04"></i><span data-title="系统管理">系统管理</span></a>
+				<div class="sublist">
+					<dl>
+
+						<dd>
+							<a id="homeJGGL" href="javaScript:void(0)" onclick="changeClass('xj-xtgl','/pcenter/web/organx/gotoOrganList.action');">机构管理</a>
+						</dd>
+
+						<dd>
+							<a id="homeJSGL" href="javaScript:void(0)" onclick="changeClass('xj-xtgl','/pcenter/role/gotoRoleList.action');">角色管理</a>
+						</dd>
+
+						<dd>
+							<a id="homeYHZXTJ" href="javaScript:void(0)" onclick="changeClass('xj-xtgl','/pcenter/userCount/gotoUserCountPage.action');">用户在线统计</a>
+						</dd>
+
+						<dd>
+							<a id="homeCZRZ" href="javaScript:void(0)" onclick="changeClass('xj-xtgl','/pcenter/operationLog/gotoOperationLogPage.action');">操作日志</a>
+						</dd>
+
+						<dd>
+							<a id="homeJGLXGL" href="javaScript:void(0)" onclick="changeClass('xj-xtgl','/pcenter/organType/gotoOrganTypeList.action');">机构类型管理</a>
+						</dd>
+
+						<dd>
+							<a id="homeRYLXGL" href="javaScript:void(0)" onclick="changeClass('xj-xtgl','/pcenter/people/listPoliceType.action');">人员类型管理</a>
+						</dd>
+
+						<dd>
+							<a id="homeZYLXGL" href="javaScript:void(0)" onclick="changeClass('xj-xtgl','/pcenter/web/resType/gotoResTypeList.action');">资源类型管理</a>
+						</dd>
+
+						<dd>
+							<a id="homeXTCSGL" href="javaScript:void(0)" onclick="changeClass('xj-xtgl','/pcenter/systemParameter/gotoPage.action');">系统参数管理</a>
+						</dd>
+
+					</dl>
+				</div>
+			</li>
+
+		</ul>
+	</div>
+	<div class="warning posR" style="bottom: -45px;">
+		<div class="warningActive posA"><i class="icon"></i></div>
+		<span class="temp">
+	      				<span class="xj-hint-box">未处理警情(16)</span>
+		</span>
+		<div class="number"><span class="timer font42 white" id="count-number" data-to="0" data-speed="1000">16</span></div>
+		<div class="warningList">
+			<ul>
+				<li class="today cursor " id="reslAlarmList">
+					<h3>实时警情</h3>
+					<p>当前暂无报警！</p>
+
+				</li>
+
+				<li class="before">
+					<h3 id="todayAlarmCount">今日(1)</h3>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="temp" id="alarmlistId">
+
+	</div>
+	<div class="xj-popup-v" id="alarmVideo" style="display: none;"></div>
+</div>
+<div class="panel-arrow-close" id="panelClose">
+	<span class="temp">
+		<span class="xj-hint-pop">点这里可以放大哦</span>
+	</span>
+</div>
+<div class="xj-jwld-panel hide" id="jwldPanel">
+
+</div>
+</div>

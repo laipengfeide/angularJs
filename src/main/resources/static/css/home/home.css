@@ -1,0 +1,507 @@
+.alarmV {
+	height: 100%;
+	width: 200px;
+	overflow: hidden;
+	box-sizing: border-box;
+	border: 0px solid #DDD;
+}
+
+.xj-popup-v {
+	width: auto;
+	height: 200px;
+	position: fixed;
+	left: 50%;
+	bottom: 0;
+	z-index: 9999;
+	text-align: center;
+}
+
+.videoAlarm {
+	height: 100%;
+	width: 200px;
+	float: left;
+	position: relative;
+	border: 2px;
+}
+
+.vedio-i-close {
+	margin-right: 22px;
+	position: absolute;
+	right: -10px;
+	top: -5px;
+	width: 16px;
+	height: 16px;
+	font-size: 20px;
+	text-align: center;
+	line-height: 16px;
+	cursor: pointer;
+	color: white;
+	display: none;
+}
+
+.vedio-i-close:hover {
+	background-color: #ccc
+}
+
+.streamBox {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 1;
+	overflow: hidden !important;
+}
+
+.pic-list {
+	flex-basis: 500px;
+	height: 400px;
+	padding: 0;
+}
+
+.hear-bar-div {
+	margin-right: 20px;
+	margin-bottom: 20px;
+	width: 100%;
+	position: absolute;
+}
+
+.seachClass {
+	text-align: center;
+	margin: 5px;
+}
+
+.dbinBox {
+	position: absolute;
+	left: 480px;
+	z-index: 99;
+	top: 130px;
+	height: 60px;
+	line-height: 40px;
+	width: auto;
+	background-color: rgba(238, 244, 247, 0.6);
+	border: 1px solid gray;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	padding-right: 5px;
+	border-top: none;
+}
+
+.dbinBox img {
+	margin-left: 18px;
+	cursor: pointer;
+	width: 22px;
+	height: 22px;
+}
+
+
+/* 警情框处理 */
+
+
+/* 警情框处理 */
+
+.first-tr {}
+
+.alarm-button1 {
+	float: right;
+	margin-right: 5px;
+	height: 25px;
+	width: 60px;
+	margin-top: 5px;
+	font-size: 12px;
+	margin-bottom: 5px;
+	color: #fff;
+	border-radius: 2px;
+	background-color: #4badd0;
+	border: none;
+}
+
+.alarm-button2 {
+	float: right;
+	margin-right: 5px;
+	height: 25px;
+	width: 40px;
+	margin-top: 5px;
+	font-size: 12px;
+	margin-bottom: 5px;
+	color: #fff;
+	border-radius: 2px;
+	background-color: #4badd0;
+	border: none;
+}
+
+.alarm-button2:hover {
+	color: #fff;
+	background-color: #4bd0bc;
+}
+
+.alarm-button-detail:hover {
+	color: #fff;
+	background-color: #51a351;
+}
+
+.position {
+	height: 26px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.alarm-button-detail {
+	float: right;
+	margin-right: 15px;
+	height: 25px;
+	width: 60px;
+	margin-top: 5px;
+	font-size: 6px;
+	border-radius: 2px;
+	margin-bottom: 5px;
+	color: #fff;
+	background-color: #4badd0;
+	border: none;
+}
+
+.alarm-button-detail:hover {
+	color: #fff;
+	background-color: #4bd0bc;
+}
+
+.alarm-button1:hover {
+	color: #fff;
+	background-color: #4bd0bc;
+}
+
+.detailInfo {
+	margin-top: 15px;
+}
+
+.detailInfo-first {
+	margin-top: 25px;
+}
+
+
+/* 资源列表分组显示  */
+
+.resourceGroupBox {
+	width: 100%;
+	height: 507px;
+	background-color: #094165;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+.gb-title {
+	margin-left: 15px;
+	height: 40px;
+	border-bottom: 1px solid #EDF1F2;
+	line-height: 40px;
+}
+
+.gb-title-icon {
+	background-image: url('../base/map/res/images/gb-refresh.png');
+	background-repeat: no-repeat;
+	float: right;
+	margin-right: 30px;
+	height: 17px;
+	width: 18px;
+	margin-top: 13px;
+}
+
+.gb-title-button1 {
+	float: right;
+	margin-right: 6px;
+	height: 25px;
+	line-height: 25px;
+	width: 40px;
+	margin-top: 6px;
+	font-size: 6px;
+	background-color: rgb(75, 173, 208);
+	border: none;
+	color: #fff;
+}
+
+.gb-title-button1:hover {
+	color: white;
+	background-color: #4bd0bc;
+}
+
+.gb-title-button2 {
+	float: right;
+	margin-right: 14px;
+	height: 25px;
+	line-height: 25px;
+	width: 40px;
+	margin-top: 6px;
+	font-size: 6px;
+	background-color: rgb(75, 173, 208);
+	border: none;
+	color: #fff;
+}
+
+.gb-title-button2:hover {
+	color: white;
+	background-color: #4bd0bc;
+}
+
+.gb-title {
+	color: #FFF;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.re-group {
+	width: 98%;
+	min-height: 30px;
+	background-color: #094165;
+	margin-top: 1px;
+	border-bottom: 1px solid #0B7EA2;
+}
+
+.re-group-header {
+	height: 30px;
+	font-size: 14px;
+	background-color: transparent;
+	line-height: 30px;
+	background-repeat: no-repeat;
+	background-position: 5%;
+}
+
+.re-group-header span {
+	margin-left: 8px;
+}
+
+.re-group-body {
+	height: auto;
+}
+
+.duty-online {}
+
+.duty-online span {
+	margin-left: 28px;
+}
+
+.duty-offline {}
+
+.duty-offline span {
+	margin-left: 28px;
+}
+
+.p-box {
+	border-bottom: 1px solid #0B7EA2;
+	padding-left: 2px;
+	clear: both;
+}
+
+.ty-list-device:hover {
+	background-color: #08597D;
+}
+
+.p-img {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
+.p-name {
+	font-size: 15px;
+	display: inline-block;
+	margin-bottom: 9px;
+}
+
+.p-area {
+	margin-bottom: 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 60px;
+}
+
+.g-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 170px;
+	line-height: 24px;
+	display: inline-block;
+}
+
+.d-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 98%;
+	display: inline-block;
+	margin-left: 11px;
+	font-size: 15px;
+}
+
+.cg-myAlert {
+	height: 100px;
+	width: 230px;
+	text-align: center;
+	background: white;
+	border-radius: 20px;
+}
+
+.cg-no-top {
+	height: 40px;
+	text-align: right;
+}
+
+.cg-myAlert-color {
+	color: red;
+}
+
+.k-popup {
+	border-radius: 20px;
+	background-color: #08597D;
+	/* border:solid #949391 1px; */
+}
+
+.cg-n-close {
+	float: right;
+	height: 16px;
+	width: 16px;
+	margin-top: 5px;
+	margin-right: 10px;
+	cursor: pointer;
+	background: #D2D3D8 url(../images/images/close.png);
+}
+
+#closeNotif:HOVER {
+	background: #949391 url(../images/images/close.png);
+}
+
+.videodiv {
+	position: absolute;
+	z-index: 999999;
+	font-family: Arial;
+	font-size: smaller;
+	right: 10px;
+	top: 120px;
+	width: 35%;
+	height: 380px;
+	line-height: 70px;
+}
+
+.videodiv1 {
+	position: absolute;
+	z-index: 999999;
+	font-family: Arial;
+	font-size: smaller;
+	top: 250px;
+	width: 290px;
+	display: table;
+	box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.2);
+}
+
+.ty-sp-box {
+	width: 100%;
+	background: white;
+	border: 1px solid rgb(9, 65, 101);
+}
+
+.cg-i-close {
+	float: right;
+	margin: 5px 5px 0 0;
+	width: 16px;
+	height: 16px;
+	font-size: 20px;
+	text-align: center;
+	line-height: 16px;
+	cursor: pointer;
+	color: white;
+}
+
+.cg-i-close:hover {
+	background-color: #ccc;
+	border-radius: 50%;
+}
+
+.caseDiv button {
+	margin-left: 7px;
+	font-size: 12px;
+	font-family: Arial, "微软雅黑", "宋体";
+}
+
+#MegaWebPlayer {
+	right: 10px;
+}
+
+.videoNameClass {
+	position: absolute;
+	top: -23px;
+	margin-left: 15px;
+	color: #3DC7F8;
+	font-size: 16px;
+	font-weight: bold;
+	width: 290px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+div.balSlider {
+	width: 100px;
+	bottom: -71px;
+	left: 50;
+}
+/**地图上右侧通用菜单**/
+.ty-more-right{
+	width:100%;
+	height:auto;
+	word-break: break-all;
+	word-wrap: break-word;
+	background-color: #094165;
+	padding:0 10px 10px 10px;
+	margin-top:10px;
+	box-sizing:border-box;
+	border:1px solid #81DFF4;
+	border-top:none;
+	position:relative;
+	top:-1px;
+	left:5px;
+}
+
+.ty-more-right>span{
+	margin-top:10px !important;
+	margin-right:10px;
+	padding:5px 5px;
+	font-size:12px;
+	color:#FFF;
+	background-color:transparent;
+	border-radius:1px;
+	border:1px solid #0ECBF9;
+	cursor:pointer;
+	display:inline-block;
+	min-width: 85px;
+}
+.ty-more-right>span:hover{
+	color:#0ECBF9;
+	border:1px solid #3DC7F8;
+	box-shadow:0 0 3px #3DC7F8;
+}
+.ty-more-right-now{
+	color:#FFF !important;
+	background-color:#3DC7F8 !important;
+	border:1px solid #3DC7F8 !important;
+}
+.statistice-button{
+	float:right;margin-right:6px;height:25px;width:80px;margin-top:0px;font-size: 6px;
+	background-color: rgb(90, 151, 255);
+    border: none;
+    color: #fff;
+}
+.statistice-button:hover{
+	color: white;
+    background-color: #4bd0bc;
+}
+.statistice-button2{
+	margin-right:6px;height:35px;width:80px;margin-top:0px;font-size: 20px;margin-left: 20px;
+	background-color: rgb(90, 151, 255);
+    border: none;
+    color: #fff;
+}
+.statistice-button2:hover{
+	color: white;
+    background-color: #4bd0bc;
+}

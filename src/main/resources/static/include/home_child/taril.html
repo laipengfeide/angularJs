@@ -1,0 +1,303 @@
+<link rel="stylesheet" type="text/css" href="../css/home/main/trail.css" />
+  <div class="ui-play-box-trail" id="playBox">
+      <div class="ui-play-tools-trail">
+          <i class="ui-play-tools-left-trail"></i>
+          <span class="uptl-txt-trail" id="spanStartTime">10:53:29</span>
+          <span class="ui-play-now-trail" id="playNow">00:00/01:00</span>
+          <div class="ui-play-lump-trail" id="playLump"></div>
+          <i class="ui-play-tools-right-trail"></i>
+          <span class="uptr-txt-trail" id="spanEndTime">10:54:29</span>
+          <span class="ui-play-tishi-trail" id="tishi"></span>
+      </div>
+      <div class="ui-play-menu-trail">
+          <button class="ui-play-stop-trail" id="palyStop" onclick="gostop();"></button>
+          <button class="ui-play-back-trail" id="playBack" onclick="goback();"></button>
+          <button class="ui-play-btn-trail" id="palyBtn" onclick="goplay();"></button>
+          <button class="ui-play-speed-trail" id="playSpeed" onclick="gospeed();"></button>
+      </div>
+      <a class="trail-close">x</a>
+  </div>
+
+  <script>
+  var dyLayer, lsGps = [],
+  imageStyle =                       //显示的图标样式1
+  {
+      externalGraphic: "../Skin/Default/css/images/blueCar.png",
+      graphicWidth: 30,
+      graphicHeight: 30,
+      pointRadius: 10,
+      stroke: false
+  },
+  startImageStyle =                       //显示的图标样式1
+  {
+      externalGraphic: "../Skin/Default/css/images/start_trans.png",
+      graphicWidth: 21,
+      graphicHeight: 21,
+      pointRadius: 10,
+      stroke: false
+  },
+   endImageStyle =                       //显示的图标样式1
+  {
+      externalGraphic: "../Skin/Default/css/images/end_trans.png",
+      graphicWidth: 21,
+      graphicHeight: 21,
+      pointRadius: 10,
+      stroke: false
+  },
+  titleStyle = {                     //文本标签样式
+      fontColor: "#FF7F00",
+      fontWeight: "bolder",
+      fontSize: "14px",
+      fill: true,
+      fillColor: "#FFFFFF",
+      fillOpacity: 1,
+      stroke: true,
+      strokeColor: "#8B7B8B",
+      labelYOffset: 25,
+      strokeLinecap: "square"
+  },
+  lineStyle = {
+      fillColor: "#cc0000",
+      pointRadius: 3,
+      strokeColor: "#cc0000",
+      strokeWidth: 2
+  };
+  var basePath='<%=basePath%>';
+  /**
+	 js 处理日期
+*/
+function convertDateForTrail(dates){
+	   var years = dates.getFullYear();
+		var months = dates.getMonth() + 1;
+		var days = dates.getDate();
+		
+		if(months<10){
+			months = "0"+months;
+		}
+		if(days<10){
+			days = "0"+days;
+		}
+		query_Gps_trail.startDate=years + "-" + months + "-" + days+" "+"00:00:00";
+		query_Gps_trail.endDate=years + "-" + months + "-" + days+" "+"23:59:59";
+		query_Gps_trail.gpsId="";
+}
+  /**
+  	通过ajax向gps服务获取gps信息
+  	@param gpsId 
+  	@param 类别名称
+  */
+  function queryGpsByAjax(gpsId,name,type){
+	  if(!query_Gps_trail || !query_Gps_trail.startDate){
+		  convertDateForTrail(new Date());
+	  }
+	  $.ajax({
+		   url:basePath+"alarm/getGpsPiontsByGpsId.do",
+		   type:"post",
+		   dataType:"json",
+		   data:{
+			   gpsId:gpsId,
+			   startDate:query_Gps_trail.startDate,
+			   endDate:query_Gps_trail.endDate,
+			   random:Math.random()
+		   },
+		   success:function(req){
+			   if(req.code == 200){
+				   if(req.data != null){
+					   if(req.data.length ==0){
+						   kendo.message("当天没有轨迹！");
+						   return;
+					   }
+					   queryGps(gpsId,name,req.data,type);
+				   }
+			   }else{
+				   kendo.message("没有轨迹");
+			   }
+		   }
+	   });
+  }
+  /**
+	 js 处理日期
+*/
+	function convertDateForTrailOnMap(dates){
+		   var years = dates.getFullYear();
+			var months = dates.getMonth() + 1;
+			var days = dates.getDate();
+			
+			if(months<10){
+				months = "0"+months;
+			}
+			if(days<10){
+				days = "0"+days;
+			}
+			query_Gps_trail_OnMap.startDate=years + "-" + months + "-" + days+" "+"00:00:00";
+			query_Gps_trail_OnMap.endDate=years + "-" + months + "-" + days+" "+"23:59:59";
+			query_Gps_trail_OnMap.gpsId="";
+	}
+	/**
+		通过ajax向gps服务获取gps信息
+		@param gpsId 
+		@param 类别名称
+	*/
+	function queryGpsByAjaxOnMap(gpsId,name,type){
+		  if(!query_Gps_trail_OnMap || !query_Gps_trail_OnMap.startDate){
+			  convertDateForTrailOnMap(new Date());
+		  }
+		  $.ajax({
+			   url:basePath+"alarm/getGpsPiontsByGpsId.do",
+			   type:"post",
+			   dataType:"json",
+			   data:{
+				   gpsId:gpsId,
+				   startDate:query_Gps_trail_OnMap.startDate,
+				   endDate:query_Gps_trail_OnMap.endDate,
+				   random:Math.random()
+			   },
+			   success:function(req){
+				   if(req.code == 200){
+					   if(req.data != null){
+						   if(req.data.length ==0){
+							   kendo.message("当天没有轨迹！");
+							   return;
+						   }
+						   queryGps(gpsId,name,req.data,type);
+					   }
+				   }else{
+					   kendo.message("没有轨迹");
+				   }
+			   }
+		   });
+	}
+  
+  /**查看gps轨迹***/
+  function queryGps(gpsId,name,obj,type) {
+	  var pointsList=[];
+	   
+		if(type == 4)
+			imageStyle.externalGraphic=basePath+"images/res/policeMove.png";
+		else
+			//imageStyle.externalGraphic=basePath+"images/res/vehicleMove.png";
+			imageStyle.externalGraphic=basePath+"images/res/vehicle04.png";
+      //所有轨迹的开始时间和结束时间
+      var allStartTime, allEndTime;
+      //单个车获得开始和结束时间，以及包含的点集
+      var startTime = obj[0].addressTime;
+      var endTime = obj[0].addressTime;
+      $(obj).each(function () {
+          var gtime = this.addressTime;
+          if (gtime < startTime) startTime = gtime;
+          if (gtime > endTime) endTime = gtime;
+          var en = new TracePositonData(gpsId, this.gpsX, this.gpsY, gtime);
+          pointsList.push(en);
+      });
+      //var trace = new TraceInfoData(gpsId, "测试车辆", pointList, startTime, endTime, imageStyle, lineStyle, startImageStyle, endImageStyle);
+      var trace = new TraceInfoData(gpsId,name, pointsList, startTime, endTime, imageStyle, lineStyle, startImageStyle, endImageStyle);
+      //获得最大范围的开始时间和结束时间
+      if (!allStartTime || startTime < allStartTime) allStartTime = startTime;
+      if (!allEndTime || endTime > allEndTime) allEndTime = endTime;
+      //恢复到起始播放状态                           
+      $("#spanStartTime").text(allStartTime);
+      $("#spanEndTime").text(allEndTime);
+      restorePlayState();
+      $("#playBox").show();
+      dragTrail();  //为播放控件加上拖动事件
+      allSpan = getTraceDateDiff(allStartTime, allEndTime, "second");
+      var traceLayer = initTraceInfoData(map, "replayTrace", [trace], allStartTime, allEndTime, titleStyle);
+      traceLayer.drawTraceTimeBack = function (e) {
+          $("#playNow").text(e);
+          var curSpan = getTraceDateDiff(allStartTime, e, "second");
+          $("#playLump").css("left", w * (curSpan / allSpan));
+      }
+      traceLayer.drawTraceFinishBack = function () {
+    	  $("#palyBtn").removeClass("ui-play-pause-trail");
+    	  $("#playNow").text(allEndTime);
+    	  $("#playLump").css("left", w );
+      }
+      //自动播放
+      goplay();
+  }
+  
+  
+  //存放时间跨度和时间轴的宽度
+  var  allSpan  , w;
+  $(function () {
+      w = $("#playBox").width()-10;
+      //轨迹播放关闭功能
+      $(".trail-close").click(function(){
+      	clearTraceInfoData();
+      	$("#playBox").hide();
+      	
+      });
+  });
+  //播放
+  function goplay() {
+      var f = $("#palyBtn").hasClass("ui-play-pause-trail");
+      if (f) {
+          pauseTraceAnimator();     
+          $("#palyBtn").removeClass("ui-play-pause-trail");
+
+      } else {
+          startTraceAnimator();
+          $("#palyBtn").addClass("ui-play-pause-trail");
+      }                    
+  }
+
+  //停止
+  function gostop() {
+      stopTraceAnimator();
+      restorePlayState();          
+  }
+
+  function restorePlayState()
+  {
+      $("#playLump").css("left", 0);
+      $("#palyBtn").removeClass("ui-play-pause-trail");
+      $("#tishi").text("X1");
+      $("#playNow").text($("#spanStartTime").text());
+  }
+  
+//快退
+  function goback() {
+      var speed= decreaseTraceSpeed();
+          $("#tishi").text("X"+speed);
+  }
+  //快进
+  function gospeed() {
+      var speed = increaseTraceSpeed();
+          $("#tishi").text("X" + speed);
+  }
+  
+  //拖动
+  function dragTrail() {
+      var oDrag = $("#playLump").get(0);
+      var posX =  0;
+      oDrag.onmousedown = function (event) {
+          var isPause = false;
+          if ($("#palyBtn").hasClass("ui-play-pause")) {
+              isPause = true;
+              pauseTraceAnimator();
+          }
+          oDrag.style.cursor = "default";
+          var event = event || window.event;
+          var disX = event.clientX - oDrag.offsetLeft;
+          document.onmousemove = function (event) {
+              var event = event || window.event;
+              var maxW = w ;
+              posX = event.clientX - disX;
+              if (posX < 0) {
+                  posX = 0;
+              } else if (posX > maxW) {
+                  posX = maxW;
+              }
+              oDrag.style.left = posX + 'px';
+          }
+          //鼠标松开，窗口将不再移动
+          document.onmouseup = function () {
+              document.onmousemove = null;
+              document.onmouseup = null;
+              //轨迹跳转到指定时间
+              skipTracePlayTime((posX / w) * allSpan);
+              if (isPause) startTraceAnimator();
+          }
+      }
+  }
+  </script>

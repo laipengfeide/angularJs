@@ -1,0 +1,1236 @@
+<link rel="stylesheet" type="text/css" href="../css/home/main/shipin.css"/>
+<div id='videomain'></div>
+<style>
+    .videodiv {
+        position: absolute;
+        z-index: 999999;
+        font-family: Arial;
+        font-size: smaller;
+        right: 10px;
+        top: 120px;
+        width: 35%;
+        height: 380px;
+        line-height: 70px;
+    }
+
+    .videodiv1 {
+        position: absolute;
+        z-index: 999999;
+        font-family: Arial;
+        font-size: smaller;
+        top: 250px;
+        width: 290px;
+        display: table;
+        box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.2);
+    }
+
+    .ty-sp-box {
+        width: 100%;
+        background: white;
+        border: 1px solid rgb(9,65,101);
+    }
+
+    .cg-i-close {
+        float: right;
+        margin: 5px 5px 0 0;
+        width: 16px;
+        height: 16px;
+        font-size: 20px;
+        text-align: center;
+        line-height: 16px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .cg-i-close:hover {
+        background-color: #ccc;
+        border-radius: 50%;
+    }
+
+    .caseDiv button {
+        margin-left: 7px;
+        font-size: 12px;
+        font-family: Arial, "微软雅黑", "宋体";
+    }
+
+    #MegaWebPlayer {
+        right: 10px;
+    }
+
+    .videoNameClass {
+        position: absolute;
+        top: -23px;
+        margin-left: 15px;
+        color: #3DC7F8;
+        font-size: 16px;
+        font-weight: bold;
+        width: 290px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+     div.balSlider {
+            width: 100px;
+            bottom:-71px;
+            left:50;
+        }
+		
+ /*   
+     #slider {
+    	margin: 0 0 -2em;
+        padding: 0;
+        text-align: center;
+     } */
+     
+  /*    div.baSlider{
+                   list-style: none;
+                   padding-bottom: 2em;
+               } */
+</style>
+<SCRIPT LANGUAGE=javascript FOR=MegaWebPlayer1 EVENT='OnUploadFile(success, response)'>
+    capUpload(1, response);
+</SCRIPT>
+<SCRIPT LANGUAGE=javascript FOR=MegaWebPlayer2 EVENT='OnUploadFile(success, response)'>
+    capUpload(2, response);
+</SCRIPT>
+<SCRIPT LANGUAGE=javascript FOR=MegaWebPlayer3 EVENT='OnUploadFile(success, response)'>
+    capUpload(3, response);
+</SCRIPT>
+<SCRIPT LANGUAGE=javascript FOR=MegaWebPlayer4 EVENT='OnUploadFile(success, response)'>
+    capUpload(4, response);
+</SCRIPT>
+
+<SCRIPT LANGUAGE=javascript FOR=MegaWebPlayer1 EVENT='OnCapImageFile(success, filepath)'>
+    capCallBack(1, filepath);
+</SCRIPT>
+<SCRIPT LANGUAGE=javascript FOR=MegaWebPlayer2 EVENT='OnCapImageFile(success, filepath)'>
+    capCallBack(2, filepath);
+</SCRIPT>
+<SCRIPT LANGUAGE=javascript FOR=MegaWebPlayer3 EVENT='OnCapImageFile(success, filepath)'>
+    capCallBack(3, filepath);
+</SCRIPT>
+<SCRIPT LANGUAGE=javascript FOR=MegaWebPlayer4 EVENT='OnCapImageFile(success, filepath)'>
+    capCallBack(4, filepath);
+</SCRIPT>
+
+<script type="text/javascript">
+    window.onresize=function(){
+        var height = $('#videodiv').height()-$('#titlevideo').height()-$('.titlevideo').height();
+        $('#videodiv').css("width",height/9*16);
+    }
+    var videoMap=new Map();
+    var ocxIdsList=[1,2,3,4];
+    var ocxMap=new Map();
+    var onlyCap=true;
+    var videoNum=0,videoEn = null,playXml,name;
+	var dbVideoNum = 0;
+    var videoArr = new Array(4);
+    var hasStopAll = false;
+    var repeat = false;
+    var currentScreen = 0;
+    var isBuild = false;
+    var addListener = false;
+    var isFourScreen = false;
+    var mynaming = "";
+    var isHasOcx;//是否安装控件
+    var focus = 0;
+    var playingNum=0;//当前播放点位
+    var savePath = '';
+    var MegaWebPlayer = document.getElementById("MegaWebPlayer");
+    var currentFocus = 1;
+    <%
+       HttpSession s = request.getSession();
+       User user = (User)s.getAttribute("User");
+     %>
+    var isEquative = <%=user.getIsEquative()%>;
+    /*
+     * 拍照成功回调
+     * @param index 截图的控件号
+     * @param filepath
+     */
+    function capCallBack(index, filepath) {
+        alert("截图成功");
+//        var MegaWebPlayer = document.getElementById("MegaWebPlayer");
+        if (videoManager.browVersion == 1) {
+            var temp = filepath.lastIndexOf("\\");
+            var addr = filepath.substring(0, temp + 1);
+            var fileName = filepath.substring(temp * 1 + 1, filepath.length);
+            var param = "<HttpUpload URL=\"<%=basePath%>alarm/uploadeByOCX.do\">"
+                    + "<Files Path=\"" + addr + "\"><File Name=\"" + fileName + "\" ContentType=\"image/pjpeg\" />"
+                    + "</Files><Params></Params></HttpUpload>";
+            MegaWebPlayer.HttpUpload(param);
+        } else {
+            var naming = videoArr[(videoNum - 1) % 4].naming;
+            var eventId = AlarmDeviceManager.EventResource[naming];
+            console.log("事件id：", eventId);
+            //没有事件id 不上传
+            if (!eventId) {
+                return;
+            }
+
+            var url = basePath + "alarm/uploadeByOCX.do";
+            var file = filepath;
+            var type = "image/bmp";
+            var extra = "organId:" + $("#organId").val(); //此处传递机构Id,为了天网截图添加水印
+            console.log("url:", url, "file:", file, "type:", type, "extra:", extra);
+            var repons = MegaWebPlayer.HttpUploadEx(url, file, type, extra);
+            console.log("repons:", repons);
+            if (repons == "") {
+                alert("上传图片失败。");
+                return;
+            }
+            capUpload(index, repons,eventId);
+        }
+    }
+    /*
+     * 图片上传成功回调
+     * @param screen 当前屏幕
+     * @param response 图片路径
+     */
+    function capUpload(screen, response,eventId) {
+//        var naming = videoMap.get("ptz" + screen);
+//        console.log("naming:", naming);
+//        var eventId = AlarmDeviceManager.EventResource[naming];
+        var response = JSON.parse(response);
+        console.log("转换对象：", response.description, "eventId:", eventId);
+        //回写状态
+        $.ajax({
+            url: basePath + "map/addEventResource.do",
+            type: "post",
+            dataType: "json",
+            data: {
+                eventId: eventId ? eventId : "",
+                resourceUrls: response.description ? response.description : ""
+            },
+            success: function (msg) {
+
+            }
+        });
+    }
+    /**
+     * 视频播放对象管理
+     */
+    var videoManager = {
+        /**
+         * 初始化屏幕的初始位置
+         */
+        screenObj:{
+            "1":{left:"600px",top:"100px"},
+            "2":{left:"1030px",top:"100px"},
+            "3":{left:"600px",top:"530px"},
+            "4":{left:"1030px",top:"530px"}
+        },
+        /** 当前播放屏幕 */
+        curPlayScreen:0,
+        /** 当前屏幕对应地图对象 */
+        screenMapEnty:new Object(),
+        /** 浏览器版本  1 ie版本;2  谷歌版本*/
+        browVersion:null,
+        /** 是否云台缩放操作 **/
+        isZoom:null
+    };
+
+    function chooseNaming(en){
+        if(en.detailInfo&&en.detailInfo.naming){
+            en.naming = en.detailInfo.naming;
+            en.naming1 = en.detailInfo.naming1;
+        }
+        mynaming = en.naming;
+        if($("#isEquative").val() == "true" && en.naming1 && en.naming1 != ""){
+            mynaming = en.naming1;
+        }
+        if(mynaming != "" && mynaming != undefined){
+            en.naming = mynaming;
+        }
+    }
+
+    function newPlayingVideo(en){
+        //MapManager.closeInfoWindow();
+        //验证是否ie和是否安装控件
+        if (validateOcxAndIE()) {
+            videoManager.browVersion = 1;
+        } else {
+            videoManager.browVersion = 2;
+        }
+        var nameLocals;
+        if(en.nameLocal || en.nameLocal==""){
+            nameLocals = en.nameLocal.trim();
+        }else if(en.detailInfo && en.detailInfo.nameLocal){
+            nameLocals = en.detailInfo.nameLocal.trim();
+        }else{
+            nameLocals = "";
+        }
+        var cameraName;
+        if(!nameLocals==""){
+            cameraName = nameLocals;
+        }else{
+            cameraName = en.name;
+        }
+        var naming;
+        chooseNaming(en);
+        naming = en.naming;
+        if (!naming) {
+            naming = "";
+        }
+        if (validateExist(naming)) {
+            return;
+        }
+        //&&naming.length < 31
+        if(en.detailInfo && en.detailInfo.camType && en.detailInfo.camType==2){
+            var sArray = [];
+            sArray.push({naming:naming,name:cameraName});
+            try{
+                sewiseManager.streamVideo('streamBox',sArray);
+            }catch(e){
+                console.log(e);
+            }
+        }else {
+
+            if (en.dbflag == undefined) {
+                //播放天网视频
+                buildGBVideoXML(videoNum, cameraName, en, naming);
+            } else {
+                //播放单兵视频
+                buildDBVideoXML(dbVideoNum, cameraName, en, naming);
+                //屏幕和地图对象 建立关系
+                videoManager.screenMapEnty[dbVideoNum] = en;
+            }
+            initButton();
+        }
+    }
+    /**
+     * 播放天网视频和单兵视频的入口
+     */
+    function playingVideo(en) {
+        //MapManager.closeInfoWindow();
+        //验证是否ie和是否安装控件
+        if (validateOcxAndIE()) {
+            videoManager.browVersion = 1;
+        } else {
+            videoManager.browVersion = 2;
+        }
+        var nameLocals;
+        if(en.nameLocal || en.nameLocal==""){
+        	nameLocals = en.nameLocal.trim();
+        }else if(en.detailInfo && en.detailInfo.nameLocal){
+        	nameLocals = en.detailInfo.nameLocal.trim();
+        }else{
+        	nameLocals = "";
+        }
+        var cameraName;
+        if(!nameLocals==""){
+        	cameraName = nameLocals;
+        }else{
+        	cameraName = en.name;
+        }
+        var naming;
+        chooseNaming(en);
+        naming = en.naming;
+        if (!naming) {
+            naming = "";
+        }
+        if (validateExist(naming)) {
+            return;
+        }
+        if (en.dbflag == undefined) {
+            //播放天网视频
+            buildGBVideoXML(videoNum, cameraName, en, naming);
+        } else {
+            //播放单兵视频
+            buildDBVideoXML(dbVideoNum, cameraName, en, naming);
+            //屏幕和地图对象 建立关系
+            videoManager.screenMapEnty[dbVideoNum] = en;
+        }
+        initButton();
+    }
+    function validateExist(naming) {
+        for (var i = 0; i < videoArr.length; i++) {
+            if (videoArr[i] && videoArr[i].naming == naming) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * 组装天网播放xml和业务操作
+     * @param videoNum 当前播放天网Num号
+     * @param en 当前播放天网的对象
+     * @paran naming 当前播放的naming
+     */
+    function buildDBVideoXML(dbVideoNum, cameraName, en, naming) {
+        var ocxHtml = "";
+        if(videoManager.browVersion == 1){//ie
+            ocxHtml += "<object classid='CLSID:A3195F4E-37EF-4808-B550-ADECD031E884'";
+            ocxHtml += "id='DBMegaWebPlayer"+dbVideoNum+"' width=400 height=370";
+            ocxHtml += "data='DATA:application/x-oleobject;BASE64,SjeBlYjBgEm21SrkMY9pShAHAABhJAAAxB0AAA=='></object>";
+        }else{//google
+            ocxHtml += "<embed id='DBMegaWebPlayer"+dbVideoNum+"' width=400 height=300  type='application/x-scty-realtime'>";
+        }
+        var c = "";
+        c += "<div id='videodiv"+dbVideoNum+"' class='videodiv'>";
+        c += "<div id='titlevideo"+dbVideoNum+"' style='background:rgb(9,65,101);border:1px solid rgb(69,213,249);height:25px;width:400px;'>";
+        c += "<span title='"+cameraName+"' class='videoNameClass' >"+cameraName+" 单兵</span>";
+        c += "<span style='float:right;margin-right:5px;' onclick=\"closeDbDiv('videodiv"+dbVideoNum+"','"+naming+"','"+dbVideoNum+"')\" class='cg-i-close'>×</span>";
+        c += "</div>";
+        c += ocxHtml;
+        c += "</div>";
+        $("#videomain").append(c);
+        var screen = videoManager.screenObj[dbVideoNum+1];
+        $("#videodiv"+dbVideoNum).css("left",screen.left);
+        $("#videodiv"+dbVideoNum).css("top",screen.top);
+        var paramArr = naming.split(":");
+        var deviceId = paramArr[0],accessIp = paramArr[2];
+        var returnXml = playDBXml(naming,cameraName,deviceId);
+        DBMegaWebPlayer = document.getElementById("DBMegaWebPlayer"+dbVideoNum);
+        try{
+            DBMegaWebPlayer.Play(accessIp, "6001", returnXml);
+        }catch(e){}
+        videoMap.put(naming,true);//判断同一视频不能再播放
+        dragVideo(dbVideoNum);//拖动
+    }
+    /**
+     * 组建播放单兵xml
+     */
+    function playDBXml(naming,devName,dstId) {
+        var playXml = "<Message privilege=1 uuid=30001>";
+        playXml += "<Naming>"+naming+"</Naming>";
+        playXml += "<Version>2</Version>";
+        playXml += "<DevName>"+devName+"</DevName>";
+        playXml += "<StreamType>MainStream</StreamType>";
+        playXml += "<DstID>"+dstId+"</DstID><SrcID />";
+        playXml += "<Type>RealTimeVideo</Type>";
+        playXml +="</Message>";
+        return playXml;
+    }
+    /**
+     * 验证是否是ie或者是否安装控件
+     */
+    function validateOcxAndIE() {
+        if (!isIE()) {
+            return false;
+        }
+        $("#videomain").css("display", "");
+        if (oxcPlayer.State == undefined) {//未安装播放器插件
+            buildUnOcxXML();
+            drag();
+            return false;
+        }
+        if (!isHasOcx) {
+            $("#videomain").empty();
+        }
+        isHasOcx = true;
+        return true;
+    }
+    /**
+     * 组装天网播放xml和业务操作
+     * @param videoNum 当前播放天网Num号
+     * @param en 当前播放天网的对象
+     * @paran naming 当前播放的naming
+     */
+    function buildGBVideoXML(videoNum, cameraName, en, naming) {
+        //组建ocx html
+        var flag = videoNum % 4;
+        if (flag == 0 && videoNum < 4 && !isBuild) {
+//           MegaWebPlayer = document.getElementById("MegaWebPlayer");
+            if(!MegaWebPlayer) {
+                buildOcxHtml(videoNum, cameraName, en, naming, videoManager.browVersion);
+                console.info("create ocx plugin");
+                MegaWebPlayer = document.getElementById("MegaWebPlayer");
+                isBuild = true;
+                isFourScreen = false;
+            }
+        }else{
+            $('#videomain #videodiv').show();
+        }
+        var video = {
+            naming: naming,
+            cameraName: cameraName
+        }
+        if (videoArr[flag]) {
+            videoArr[flag]['naming'] = naming;
+            videoArr[flag]['cameraName'] = cameraName;
+        } else {
+            videoArr[flag] = video;
+        }
+        //------------------实时播放视频------------------------
+        playXml = realPlayVideo(flag, naming, cameraName);
+//        videoMap.put("playXml" + videoNum, playXml);//提供暂停再播放playxml
+//        videoMap.put("MegaWebPlayer" + videoNum, cameraName);//此处为了录像时获取当前视频名称
+//        videoMap.put("ptz" + videoNum, naming);//此处为了云台控制获取当前视频naming
+        dragVideo(videoNum);//拖动
+    }
+    ;
+    /**
+     * 组装ie 控件xml
+     * @param videoNum 当前播放天网Num号
+     * @param en 当前播放天网的对象
+     * @paran naming 当前播放的naming
+     * @param browType 浏览器类型
+     */
+    var buildOcxHtml = function (videoNum, cameraName, en, naming, browType) {
+        $("#videomain").css("display", "block");
+        var ocxHtml = "", c = "";
+        if (browType == 1) {//ie
+            ocxHtml += "<object classid='clsid:9581374A-C188-4980-B6D5-2AE4318F694A'";
+            ocxHtml += "id='MegaWebPlayer' width='100%' height='100%' ";
+            ocxHtml += "data='DATA:application/x-oleobject;BASE64,SjeBlYjBgEm21SrkMY9pShAHAABhJAAAxB0AAA=='></object>";
+        } else {//google
+            ocxHtml += "<embed id='MegaWebPlayer' width='100%' height='100%' ";
+            ocxHtml += "type='application/x-hxht-realtime'>";
+        }
+        c += "<div id='videodiv' class='videodiv'>";
+        c += "<div id='titlevideo' style='background:rgb(9,65,101);border:1px solid rgb(69,213,249);height:25px;width:100%;'>";
+        c += "<span title='" + cameraName + "' class='videoNameClass' id='videoHead' >" + cameraName + "</span>";
+        c += "<span style='float:right;margin-right:5px;' onclick=\"closeDiv('videodiv','" + naming + "','" + videoNum + "')\" class='cg-i-close'>×</span>";
+        c += "</div>";
+        c += ocxHtml;
+        c += "<div class='ty-sp-box'>";
+        c += "<i onclick='video_stop()' title='停止' id='ocx-stop' class='ocx-icon ocx-stop'></i>";
+        c += "<i onclick='video_stop_all(true)' title='全部停止' id='ocx-stop-all' class='ocx-icon ocx-stop-all'></i>";
+        c += "<i onclick='video_cap()' title='截屏上传' id='ocx-capture' class='ocx-icon ocx-capture'></i>";
+        c += "<i onclick='video_start_record()' title='录制' id='ocx-record' class='ocx-icon ocx-record'></i>";
+        c += "<i onclick='video_stop_record()' title='停止录制' id='ocx-record-click' class='ocx-icon ocx-recording'></i>";
+        c += "<i onclick='video_set_sound(false)' title='声音' id='ocx-sound' class='ocx-icon ocx-sound'></i>";
+        c += "<i onclick='video_set_sound(true)' title='声音' id='ocx-open-sound' class='ocx-icon ocx-sounding'></i>"; 
+        c += "<i input input id='slider' class='balSlider' title='滑动'></i>";
+        c += "<i title='云台控制' id='ocx-pzx-control' class='ocx-icon ocx-pzx-control'>" +
+            "<span class='ocx-button-left' onclick='video_left()'></span>" +
+            "<span class='ocx-button-top' onclick='video_up()'></span>" +
+            "<span class='ocx-button-right' onclick='video_right()'></span>" +
+            "<span class='ocx-button-bottom' onclick='video_down()'></span></i>"; 
+        c += "<i onclick='video_zoomOut()' title='放大' id='ocx-zoom-in' class='ocx-icon ocx-zoom-in'></i>";
+        c += "<i onclick='video_zoomIn()' title='缩小' id='ocx-zoom-out' class='ocx-icon ocx-zoom-out'></i>";
+        c += "<i onclick='setVideoScreen(4)' title='四分屏' id='ocx-four-screen' class='ocx-icon ocx-four-screen'></i>";
+        c += "<i onclick='setVideoScreen(1)' title='一分屏' id='ocx-single-screen' class='ocx-icon ocx-single-screen'></i>";
+        c += "<i onclick='video_full()' title='全  屏' id='ocx-full-screen' class='ocx-icon ocx-full-screen'></i>";
+        c += "</div>";
+        $("#videomain").append(c);
+    };
+    /**
+     * 实时播放视频
+     * @param videoNum  当前播放天网Num号
+     * @param naming  播放naming
+     * @param cameraName  播放名称
+     */
+    var realPlayVideo = function (curVideoNum, naming, cameraName) {
+
+
+
+        var gbIP = naming.split(":")[2], playRealXml = "";
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer");
+        if (videoManager.browVersion == 1) {//ie
+            playRealXml += "<SourceAddr><IP>" + gbIP + "</IP><Port>" + "6001" + "</Port><CameraID>";
+            playRealXml += naming + "</CameraID><SessionID>0000000000200000000000001694555</SessionID></SourceAddr>";
+            MegaWebPlayer.SourceAddr = playRealXml;
+        } else {//google
+            playRealXml += "<?xml version='1.0' encoding='GBK'?>";
+            playRealXml += "<Source type='access'><Camera naming='" + naming + "'/>";
+            playRealXml += "<Version value='1' /><Account sessionId ='0000000000200000000000001694555'/>";
+            playRealXml += "<Access ip='" + gbIP + "' port='6001' /></Source>";
+            try {
+                if(!addListener){
+                    MegaWebPlayer.addEventListener("OnScreenFocusChanged", function (param) {
+                        currentScreen = param;
+                        if (videoArr[param] && videoArr[param].cameraName) {
+                            setTitleAttr(videoArr[param].cameraName);
+                        }
+						
+						if(MegaWebPlayer.GetSound()){
+							$('#ocx-sound').hide();
+							$('#ocx-open-sound').show();
+						}else{
+							$('#ocx-sound').show();
+							$('#ocx-open-sound').hide();
+						}	
+                    }, true);
+                    addListener = true;
+                }
+                if (videoNum == 0 && !hasStopAll&&!isFourScreen) {
+                    MegaWebPlayer.SetScreenCount(1);
+                } else {
+                    MegaWebPlayer.SetScreenCount(4);
+                    isFourScreen = true;
+                }
+                videoNum++;
+                curVideoNum = curVideoNum + 1;
+                MegaWebPlayer.SetScreenFocus(curVideoNum);
+                if (videoManager.browVersion == 1) {
+                    MegaWebPlayer.Action = "Stop";
+                } else {
+                    MegaWebPlayer.Stop(true);
+                }
+                MegaWebPlayer.Init(playRealXml);
+                MegaWebPlayer.Connect();
+            } catch (e) {
+            }
+        }
+        return playRealXml;
+
+    }
+    function setTitleAttr(cameraName) {
+        $('#videoHead').prop('title', cameraName);
+        $('#videoHead').text(cameraName);
+    }
+    function mouseOnStop() {
+        $('#ocx-stop').removeClass('ocx-stop');
+        $('#ocx-stop').addClass('ocx-stopping');
+    }
+    function mouseOutStop() {
+        $('#ocx-stop').removeClass('ocx-stopping');
+        $('#ocx-stop').addClass('ocx-stop');
+    } 
+    function mouseOnStopAll() {
+        $('#ocx-stop-all').removeClass('ocx-stop-all');
+        $('#ocx-stop-all').addClass('ocx-stopping-all');
+    }
+    function mouseOutStopAll() {
+        $('#ocx-stop-all').removeClass('ocx-stopping-all');
+        $('#ocx-stop-all').addClass('ocx-stop-all');
+    }
+    function mouseOnCapture() {
+        $('#ocx-capture').removeClass('ocx-capture');
+        $('#ocx-capture').addClass('ocx-capture-upload');
+    }
+    function mouseOutCapture() {
+        $('#ocx-capture').removeClass('ocx-capture-upload');
+        $('#ocx-capture').addClass('ocx-capture');
+    }
+    function mouseOnRecord() {
+        $('#ocx-record').removeClass('ocx-record');
+        $('#ocx-record').addClass('ocx-recording');
+    }
+    function mouseOutRecord() {
+        $('#ocx-record').removeClass('ocx-recording');
+        $('#ocx-record').addClass('ocx-record');
+    }
+    function mouseOnFourScreen() {
+        $('#ocx-four-screen').removeClass('ocx-four-screen');
+        $('#ocx-four-screen').addClass('ocx-four-screening');
+    }
+    function mouseOutFourScreen() {
+        $('#ocx-four-screen').removeClass('ocx-four-screening');
+        $('#ocx-four-screen').addClass('ocx-four-screen');
+    }
+    function mouseOnSingleScreen() {
+        $('#ocx-single-screen').removeClass('ocx-single-screen');
+        $('#ocx-single-screen').addClass('ocx-single-screening');
+    }
+    function mouseOutSingleScreen() {
+        $('#ocx-single-screen').removeClass('ocx-single-screening');
+        $('#ocx-single-screen').addClass('ocx-single-screen');
+    }
+    function mouseOnFullScreen() {
+        $('#ocx-full-screen').removeClass('ocx-full-screen');
+        $('#ocx-full-screen').addClass('ocx-full-screening');
+    }
+    function mouseOutFullScreen() {
+        $('#ocx-full-screen').removeClass('ocx-full-screening');
+        $('#ocx-full-screen').addClass('ocx-full-screen');
+    }
+    function sliderOnChange(e) {
+    	MegaWebPlayer.SetVolume(e.value);
+    }
+    function initButton() {
+        $('#ocx-record-click').hide();
+        $('#ocx-open-sound').hide();
+        $("#slider").kendoSlider({
+            change: sliderOnChange,
+            showButtons:false,
+            min: 0,
+            max: 65535,
+            smallStep: 1,
+            largeStep: 13107,
+            value: 32767
+        });
+        var slider = $("#slider").getKendoSlider();
+        if (slider!=null && slider!=undefined) {
+        	slider.wrapper.css("width", "70px");
+        	slider.resize();
+        }
+        
+        if (videoNum == 1 && !hasStopAll) {
+            $('#ocx-stop-all').hide();
+            $('#ocx-four-screen').show();
+            $('#ocx-single-screen').hide();
+        } else {
+            $('#ocx-stop-all').show();
+            $('#ocx-four-screen').hide();
+            $('#ocx-single-screen').show();
+        }
+        
+       $(".k-slider-track").attr("style", "left: 5px;width: 70px;");
+    }
+   
+
+    function video_full() {
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer");
+        MegaWebPlayer.FullScreen(true);
+    }
+
+    /**
+     * 组建未安装ocx xml
+     */
+    function buildUnOcxXML() {
+        $("#videomain").empty();
+        var c = "";
+        c += "<div class='videodiv1'>";
+        c += "<div id='titlevideo' style='background:rgb(9,65,101);border:1px solid rgb(69,213,249);height:25px;line-height:25px;'>";
+        c += "<span style='font-size:15px;margin-left:10px;font-family:Arial, \"微软雅黑\", \"宋体\";'>提示:</span>";
+        c += "<span onclick=\"closeDiv1()\" class='cg-i-close'>×</span></div>";
+        c += "<table style='background-color:#EBEFF3;height:260px;'><tbody><tr><td>";
+        c += "<p style='width:290px;'><lable style='height:50px;font-size:15px;margin-left:10px;margin-top:30px;font-family:Arial, \"微软雅黑\", \"宋体\";'>尚未安装播放器插件，请安装后刷新页面</lable></p>";
+        c += "<p style='width:290px;'><button type='button' style='font-size:20px;margin-left:20px;margin-top:10px' class='k-primary k-button' onclick='exportOcx()' >点击安装播放器插件</button></p>";
+        c += "</td></tr></tbody></table></div>";
+        $("#videomain").append(c);
+    }
+
+
+
+    function setVideoScreen(screen) {
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer");
+        if (screen == 1) {
+            MegaWebPlayer.GetScreenFocus();
+            MegaWebPlayer.SetScreenCount(1);
+            MegaWebPlayer.SetScreenFocus(currentFocus);
+            $('#ocx-four-screen').show();
+            $('#ocx-single-screen').hide();
+        } else {
+             MegaWebPlayer.SetScreenFocus(currentFocus);
+            MegaWebPlayer.SetScreenCount(screen);
+            MegaWebPlayer.SetSound(false);
+            $('#ocx-four-screen').hide();
+            $('#ocx-single-screen').show();
+        }
+		
+    }
+	
+    //截图
+    function video_cap(type) {
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer");
+        var myDate = new Date();
+        var mytime = myDate.getFullYear() + "" + myDate.getMonth() + "" + myDate.getDate() + "" + myDate.getHours() + "" + myDate.getMinutes() + "" + myDate.getSeconds();        //获取日期与时间
+        var path = "";
+        if (videoManager.browVersion == 1) {
+            path += tempPicAndVideoUrl.replace('/', '\\\\') + "\\";
+//            path += videoMap.get("MegaWebPlayer" + videoNum);
+            path += videoArr[(videoNum - 1) % 4].cameraName;
+            path += "\\";
+            path += mytime + ".jpg";
+            MegaWebPlayer.Action = "CaptureImage:" + path;
+        } else {
+            path += tempPicAndVideoUrl.replace('/', '\\') + "\\";
+//            path += videoMap.get("MegaWebPlayer" + videoNum);
+            path += videoArr[(videoNum - 1) % 4].cameraName;
+            path += "\\";
+            path += mytime + ".bmp";
+            console.info(path);
+            var status = MegaWebPlayer.Snapshot(path);
+            capCallBack(videoNum, path);
+        }
+        onlyCap = true;
+    }
+    //播放
+    function video_play(videoNum) {
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer" + videoNum);
+        var xml = videoMap.get("playXml" + videoNum);
+        if (videoManager.browVersion == 1) {
+            MegaWebPlayer.SourceAddr = xml;
+        } else {
+            MegaWebPlayer.Init(xml);
+            MegaWebPlayer.Connect();
+        }
+    }
+  //音量关
+    function video_set_sound(flag){
+		if(!flag){
+			$('#ocx-sound').hide();
+			$('#ocx-open-sound').show();
+			MegaWebPlayer.SetSound(true);
+			MegaWebPlayer.GetSound();	
+		}else{
+			$('#ocx-open-sound').hide();
+			$('#ocx-sound').show();
+			MegaWebPlayer.SetSound(false);
+			MegaWebPlayer.GetSound()
+		}
+    	 	
+    }
+
+	
+
+    function video_stop() {
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer");
+		var focus = MegaWebPlayer.GetScreenFocus();
+        videoArr[focus-1]=null;
+        videoNum = focus-1;
+        $('#videoHead').text('');
+        $('#videoHead').prop('title', '');
+        addListener = false;
+        if (videoManager.browVersion == 1) {
+            MegaWebPlayer.Action = "Stop";
+        } else {
+            try {
+                MegaWebPlayer.Stop(true);
+            } catch (e) {
+            }
+        }
+//        MegaWebPlayer.removeEventListener();
+    }
+
+    function video_stop_all(flag) {
+        videoNum = 0;
+        $('#videodiv').html();
+        if(flag && flag == true){
+        	hasStopAll = true;
+        }else{
+        	hasStopAll = false;
+        }
+        isFourScreen = false;
+        videoArr = [];
+        $('#videoHead').text('');
+        $('#videoHead').prop('title', '');
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer");
+        if (videoManager.browVersion == 1) {
+            MegaWebPlayer.Action = "Stop";
+        } else {
+            try {
+                MegaWebPlayer.StopAll();
+            } catch (e) {
+            }
+        }
+//        MegaWebPlayer.removeEventListener();
+        addListener = false;
+    }
+    //开始录像
+    var isRecording = 0;
+    function video_start_record() {
+        $('#ocx-record').hide();
+        $('#ocx-record-click').show();
+        var myDate = new Date();
+        var mytime = myDate.getFullYear() + "" + myDate.getMonth() + "" + myDate.getDate() + "" + myDate.getHours() + "" + myDate.getMinutes() + "" + myDate.getSeconds();        //获取日期与时间
+        var path = "";
+        if (videoManager.browVersion == 1) {
+            path += tempPicAndVideoUrl.replace('/', '\\\\') + "\\";
+//            path += videoMap.get("MegaWebPlayer" + videoNum);
+            path += videoArr[(videoNum - 1) % 4].cameraName;
+            path += "\\";
+            path += mytime + ".mp4";
+        } else {
+            path += tempPicAndVideoUrl.replace('/', '\\') + "\\";
+//            path += videoMap.get("MegaWebPlayer" + videoNum);
+            path += videoArr[(videoNum - 1) % 4].cameraName;
+            path += "\\";
+            path += mytime + ".mp4";
+        }
+        savePath = path;
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer");
+        if (!videoArr[(videoNum - 1) % 4]["recording"]) {
+            videoArr[(videoNum - 1) % 4]["recording"] = true;
+            if (videoManager.browVersion == 1) {
+                MegaWebPlayer.Action = "StartRecoder:" + path;
+            } else {
+                MegaWebPlayer.StartRecorder(path);
+            }
+        }
+    }
+    //结束录像
+    function video_stop_record() {
+        $('#ocx-record-click').hide();
+        $('#ocx-record').show();
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer");
+        videoArr[(videoNum - 1) % 4]["recording"] = false;
+        if (videoManager.browVersion == 1) {
+            MegaWebPlayer.Action = "StopRecoder";
+        } else {
+            MegaWebPlayer.StopRecorder();
+        }
+        kendo.message(savePath);
+    }
+    /**
+     * 组建云台控制xml
+     * @param direction 云台方向
+     * @param cmd 指令值
+     * @param naming 播放Naming
+     */
+    var buildPTZXml = function (index,direction, cmd) {
+        var naming = videoArr[index-1].naming, param = "";
+        param += "<Parameter CmdType='PTZControl'>";
+        param += "<SessionID>0000000000200000000000002410239</SessionID>";
+        param += "<Account UsrNaming='" + naming + "'/>";
+        param += "<Naming Name='252'>" + naming + "</Naming>";
+        param += "<Operate>" + cmd + "</Operate>";
+        if (cmd == 8302) {//缩小，放大
+            param += "<Switch>" + direction + "</Switch>";
+            videoManager.isZoom = true;
+        }
+        if (cmd == 8200) {//云台方向
+            param += "<Action Direct='" + direction + "' Speed='84'/>";
+            videoManager.isZoom = false;
+        }
+        param += "</Parameter>";
+        return param;
+    };
+    var opeObj = null;
+    //缩小
+    function video_zoomIn() {
+        opeObj = document.getElementById("MegaWebPlayer");
+        var index = opeObj.GetScreenFocus();
+        if (videoManager.browVersion == 1) {
+            opeObj.Action = "Ptz:far";
+        } else {
+            opeObj.PtzControl(buildPTZXml(index, 0, 8302));
+        }
+        video_ptz_stop();
+    }
+
+    //放大
+    function video_zoomOut() {
+        opeObj = document.getElementById("MegaWebPlayer");
+        var index = opeObj.GetScreenFocus();
+        if (videoManager.browVersion == 1) {
+            opeObj.Action = "Ptz:near";
+        } else {
+            opeObj.PtzControl(buildPTZXml(index, 1, 8302));
+        }
+        video_ptz_stop();
+    }
+
+    //左移
+    function video_left() {
+        opeObj = document.getElementById("MegaWebPlayer");
+        var index = opeObj.GetScreenFocus();
+        if (videoManager.browVersion == 1) {
+            opeObj.Action = "Ptz:left";
+        } else {
+            opeObj.PtzControl(buildPTZXml(index,"L", 8200));
+        }
+        video_ptz_stop();
+    }
+
+    //右移
+    function video_right() {
+        opeObj = document.getElementById("MegaWebPlayer");
+        var index = opeObj.GetScreenFocus();
+        if (videoManager.browVersion == 1) {
+            opeObj.Action = "Ptz:right";
+        } else {
+            opeObj.PtzControl(buildPTZXml(index, "R", 8200));
+        }
+        video_ptz_stop();
+    }
+
+    //上移
+    function video_up() {
+        opeObj = document.getElementById("MegaWebPlayer");
+        var index = opeObj.GetScreenFocus();
+        if (videoManager.browVersion == 1) {
+            opeObj.Action = "Ptz:up";
+        } else {
+            opeObj.PtzControl(buildPTZXml(index, "U", 8200));
+        }
+        video_ptz_stop();
+    }
+
+    //下移
+    function video_down() {
+        opeObj = document.getElementById("MegaWebPlayer");
+        var index = opeObj.GetScreenFocus();
+        if (videoManager.browVersion == 1) {
+            opeObj.Action = "Ptz:down";
+        } else {
+            opeObj.PtzControl(buildPTZXml(index, "D", 8200));
+        }
+        video_ptz_stop();
+    }
+
+    //停止移动
+    function video_ptz_stop() {
+        if (opeObj) {
+            if (videoManager.browVersion == 1) {
+                opeObj.Action = "Ptz:stop";
+            } else {
+                if (videoManager.isZoom) {//是否缩放操作
+                    opeObj.PtzControl(buildPTZXml(videoNum, 0, 8308));
+                } else {
+                    opeObj.PtzControl(buildPTZXml(videoNum, "", 8202));
+                }
+            }
+        }
+        opeObj = null;
+    }
+
+    /**
+     关闭所有
+     */
+    function closeVideoAll() {
+        $('#videomain #videodiv').remove();
+		videoMap.removeAll();
+			videoArr = [];
+			videoNum = 0;
+			hasStopAll = false;
+			isBuild = false;
+			videoEn = null;
+    }
+
+	function closeDbDiv(divId, naming, num){
+		ocxMap.put(divId,null);//清空ocx屏幕集合中对象的value,以便获取当前播放屏幕号
+		videoMap.put(naming,false); //清空naming值
+		playingNum--; //当前播放点位数量 -1
+		$(divId).remove();
+		DBMegaWebPlayer = document.getElementById("DBMegaWebPlayer"+num);
+		try {
+			DBMegaWebPlayer.StopVideo();
+		} catch (e) {
+		}
+		videoManager.screenMapEnty[num] = null;
+		$("#videomain #" + divId).remove();
+		return;
+		/** 获取到地图对象 */
+		var enty = videoManager.screenMapEnty[num];
+		if (enty && enty != null) {
+			//单兵下线则跳出
+		var en = ResourceDatas.DBinDatas[enty.id]
+		if (!en || en == null) {
+			return;
+		}
+		var imgUrl = MapHandler.getBarImgByType(4, enty.detailInfo.typeId, false, false);
+		enty.iconUrl = imgUrl;
+		//删除单兵未播对象
+		MapToobar.clearVectorMarkersByIdType(enty);
+		//更换图标重新上图
+		MapManager.createPointOnly(enty);
+		//更改列表图标
+		$("#dbinBox #" + enty.id).attr("src", imgUrl);
+		}
+	}
+    /**
+     *隐藏过滤窗口
+     *@param divId 当前视频窗口videodiv+num
+     *@param  num 当前屏幕id
+     */
+    function closeDiv(naming, num) {
+//       ocxMap.put(divId,null);//清空ocx屏幕集合中对象的value,以便获取当前播放屏幕号
+//       videoMap.put(naming,false); //清空naming值
+//       playingNum--; //当前播放点位数量 -1
+        $('#videomain #videodiv').hide();
+        videoArr = [];
+        videoNum = 0; //当前播放点位数量 -1
+        hasStopAll = false;
+        isFourScreen = false;
+        addListener = false;
+        //停止单兵或者天网视频
+        video_stop_all(false);
+//        MegaWebPlayer = document.getElementById("MegaWebPlayer");
+//        if (MegaWebPlayer) {
+//            if (videoManager.browVersion == 1) {
+//                MegaWebPlayer.Action = "Stop";
+//            } else {
+//                try {
+//                    MegaWebPlayer.Stop(true);
+//                    MegaWebPlayer.removeEventListener();
+//                } catch (e) {
+//                }
+//            }
+//        } else {
+////            DBMegaWebPlayer = document.getElementById("DBMegaWebPlayer"+num);
+////            try {
+////                DBMegaWebPlayer.StopVideo();
+////            } catch (e) {
+////            }
+//        }
+//        videoManager.screenMapEnty[num] = null;
+//        $("#videomain #" + divId).remove();
+//        return;
+//        /** 获取到地图对象 */
+//        var enty = videoManager.screenMapEnty[num];
+//        if (enty && enty != null) {
+//            //单兵下线则跳出
+//            var en = ResourceDatas.DBinDatas[enty.id]
+//            if (!en || en == null) {
+//                return;
+//            }
+//            var imgUrl = MapHandler.getBarImgByType(4, enty.detailInfo.typeId, false, false);
+//            enty.iconUrl = imgUrl;
+//            //删除单兵未播对象
+//            MapToobar.clearVectorMarkersByIdType(enty);
+//            //更换图标重新上图
+//            MapManager.createPointOnly(enty);
+//            //更改列表图标
+//            $("#dbinBox #" + enty.id).attr("src", imgUrl);
+//        }
+    }
+    //判断IE
+    function isIE() { //ie?
+        if (!!window.ActiveXObject || "ActiveXObject" in window)
+            return true;
+        else
+            return false;
+    }
+    //下载ocx
+    function exportOcx() {
+
+        window.location.href = "<%=basePath%>web/GBPlatForm/GetWebocx.do";
+    }
+
+    /**
+     * 窗体拖动
+     */
+    function dragVideo(videoNum) {
+        var oDrag = $("#videodiv").get(0);
+        var oTitle = $("#titlevideo").get(0);
+        var posX = posY = 0;
+        if(!oTitle){
+            return ;
+        }
+        oTitle.onmousedown = function (event) {
+            oTitle.style.cursor = "pointer";
+            var event = event || window.event;
+            var disX = event.clientX - oDrag.offsetLeft;
+            var disY = event.clientY - oDrag.offsetTop;
+            //鼠标移动，窗口随之移动
+            document.onmousemove = function (event) {
+                var event = event || window.event;
+                var maxW = document.documentElement.clientWidth - oDrag.offsetWidth;
+                var maxH = document.documentElement.clientHeight;
+                posX = event.clientX - disX;
+                posY = event.clientY - disY;
+                if (posX < 0) {
+                    posX = 0;
+                } else if (posX > maxW) {
+                    posX = maxW;
+                }
+                if (posY < 0) {
+                    posY = 0;
+                } else if (posY > maxH) {
+                    posY = maxH;
+                }
+                oDrag.style.left = posX + 'px';
+                oDrag.style.top = posY + 'px';
+            }
+            //鼠标松开，窗口将不再移动
+            document.onmouseup = function () {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+        }
+    }
+    //验证播放控件div关闭
+    function closeDiv1() {
+        $("#videomain").css("display", "none");
+        videoNum = 0;
+        videoArr = [];
+        isBuild = false;
+        hasStopAll = false;
+        isFourScreen = false;
+    }
+
+    //拖动
+    function drag() {
+        var oDrag = $(".videodiv1").get(0);
+        var posX = posY = 0;
+        oDrag.onmousedown = function (event) {
+            oDrag.style.cursor = "default";
+            var event = event || window.event;
+            var disX = event.clientX - oDrag.offsetLeft;
+            var disY = event.clientY - oDrag.offsetTop;
+            //鼠标移动，窗口随之移动
+            document.onmousemove = function (event) {
+                var event = event || window.event;
+                var maxW = document.documentElement.clientWidth - oDrag.offsetWidth;
+                var maxH = document.documentElement.clientHeight;
+                posX = event.clientX - disX;
+                posY = event.clientY - disY;
+                if (posX < 0) {
+                    posX = 0;
+                } else if (posX > maxW) {
+                    posX = maxW;
+                }
+                if (posY < 0) {
+                    posY = 0;
+                } else if (posY > maxH) {
+                    posY = maxH;
+                }
+                oDrag.style.left = posX + 'px';
+                oDrag.style.top = posY + 'px';
+            }
+            //鼠标松开，窗口将不再移动
+            document.onmouseup = function () {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+        }
+    }
+
+    (function () {
+        $("body").keydown(function (e) {
+            var e = window.event || e;
+            MegaWebPlayer = document.getElementById("MegaWebPlayer");
+            var through = false;
+            if (through) {
+                if (e.keyCode == 27 || e.keyCode == 96)//esc
+                {
+                    videoMap.put("full" + videoNum, false);
+                }
+                if (e.keyCode == 38)//上
+                {
+                    if (videoManager.browVersion == 1) {
+                        opeObj.Action = "Ptz:up";
+                    } else {
+                        console.log("上：操作google" + videoNum);
+                        opeObj.PtzControl(buildPTZXml(videoNum, "U", 8200));
+                    }
+                }
+                else if (e.keyCode == 40)//下
+                {
+                    if (videoManager.browVersion == 1) {
+                        opeObj.Action = "Ptz:down";
+                    } else {
+                        opeObj.PtzControl(buildPTZXml(videoNum, "D", 8200));
+                    }
+                }
+                else if (e.keyCode == 37)//左
+                {
+                    if (videoManager.browVersion == 1) {
+                        opeObj.Action = "Ptz:left";
+                    } else {
+                        opeObj.PtzControl(buildPTZXml(videoNum, "L", 8200));
+                    }
+                }
+                else if (e.keyCode == 39)//右
+                {
+                    if (videoManager.browVersion == 1) {
+                        opeObj.Action = "Ptz:right";
+                    } else {
+                        opeObj.PtzControl(buildPTZXml(videoNum, "R", 8200));
+                    }
+                }
+                else if (e.keyCode == 49 && e.ctrlKey)//ctrl+1
+                {
+                    opeObj.playerFullScreen = "0";
+                    create_case(videoNum, videoEn);
+                }
+                else if (e.keyCode == 187 && e.ctrlKey)//ctrl +
+                {
+                    opeObj.Action = "Ptz:near";
+                }
+                else if (e.keyCode == 189 && e.ctrlKey)//ctrl -
+                {
+                    opeObj.Action = "Ptz:far";
+                }
+            }
+        });
+        $("body").keyup(function (e) {
+            if (e.keyCode == 38 || e.keyCode == 40 || e.keyCode == 37 || e.keyCode == 39 || e.keyCode == 187 || e.keyCode == 189) {
+                video_ptz_stop();
+            }
+        });
+    })();
+</script>
+<div style='display:none;'>
+    <object
+            classid="clsid:9581374A-C188-4980-B6D5-2AE4318F694A"
+            id="oxcPlayer" width=560 height=326
+            data="DATA:application/x-oleobject;BASE64,SjeBlYjBgEm21SrkMY9pShAHAABhJAAAxB0AAA==">
+    </object>
+</div>
+

@@ -1,0 +1,133 @@
+#map{
+    position: relative;
+    height: 553px;
+}
+.ty-dct-camera-td{border-bottom:1px solid gray;}
+.ty-dct-pgrid{float:left;width:70px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.ty-dct-color{margin-bottom:5px;}
+.ty-dct-title{background:rgb(252, 252, 253);height:40px;}
+.ty-dct-select-span{background:#187ED9;}
+.ty-dct-select-span li{color:white;}
+.ty-dct-title span{color:black;font-size:15px;margin-left:5px;float:left;width:75px;height:43px;text-align:center;line-height:30px;}
+.ty-dct-title span:hover{background:rgb(92, 107, 192);color:white;}
+.ty-dct-title span:focus{background:#187ED9;color:white;}
+.ty-dct-div{min-height:35px;border-bottom:1px solid #ccc;margin-top:5px;}
+.ty-dct-div span{margin-left:15px;}
+.ty-dct-second{margin-left:3px;}
+.ty-dct-hide{padding-left:20px;display:none;}
+#resourceTable{float:left;overflow:auto;width:325px;}
+#resourcePanel{z-index:9990;position:relative;left:357px;height:auto;width:260px;line-height:20px;top:49px;background:#094165;border: 1px solid #0ECBF9;}
+#partTabelDiv{z-index:9999;position:absolute;right:0px;height:auto;width:375px;top:130px;dispaly:none;}
+#serDepment{z-index:9999;position:absolute;right:0px;height:auto;width:650px;top:130px;dispaly:none;}
+#wxcgPartTabelDiv{z-index:9999;position:absolute;right:100px;height:auto;width:150px;top:130px;display:none;}
+#wxpartType{width: 99%;background: white;padding: 10px;}
+#wxpartType li{height: 30px;margin-left: 30px;}
+#wxpartType li span{height: 28px;padding: 3px;}
+.DBinBody{width:55px;height:40px;float:left;}
+.DBName{margin-top: -15px;text-align:center;width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.hidden{display:none;}
+.show{display:block;}
+.cg-search-area{line-height:normal;}
+.p-detail{height:30px;}
+.p-detail div{float:left;margin-right:10px;}
+.gb-name{margin-left:5px;font-size:1em;width:150px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;vertical-align:text-top;}
+.ty-list-device{width:100%;border-bottom:1px solid #0B7EA2;height:60px;}
+.ty-span-img{margin-left:25px;margin-right:10px;}
+.deviceBox{background-color:transparent;}
+.list-number{
+	margin-bottom: 5px;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 90px;
+}
+.list-address{
+	margin-bottom: 5px;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 90px;
+    float:left;
+}
+
+.ty-list-type{
+	position: absolute;
+    left: 254px;
+    z-index: 99;
+    height: 140px;
+    line-height: 40px;
+    width: 60px;
+}
+.ty-list-type>span{
+	background-color:#094165;
+	color:#FFF;
+	width:70px;
+	height:36px;
+	float:left;
+	margin-bottom:2px;
+	text-align: center;
+    border-radius: 1px;
+    line-height: 33px;
+    cursor:pointer;
+    margin-left:5px;
+    border: 1px solid #0ECBF9;
+    border-left: 0;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+.ty-list-type>span:first-child{
+	background:url(../images/box_button_bg1.png) no-repeat transparent;
+	border:none;
+}
+.ty-list-type>span:last-child{
+	background:url(../images/box_button_bg2.png) no-repeat transparent;
+	border:none;
+}
+.ty-list-type>span:hover{
+	color: white;
+    background-color: #3DC7F8;
+}
+.ty-list-type>span:hover:first-child{
+	background:url(../images/box_button_bg1_h.png) no-repeat;
+}
+.ty-list-type>span:hover:last-child{
+	background:url(../images/box_button_bg2_h.png) no-repeat;
+}
+.list-span-current{
+	color: white !important;
+    background-color: #3DC7F8 !important;
+}
+.list-span-current:first-child{
+	background:url(../images/box_button_bg1_h.png) no-repeat transparent !important;
+}
+.list-span-current:last-child{
+	background:url(../images/box_button_bg2_h.png) no-repeat transparent !important;
+}
+.ty-chart-toobar{
+	position: absolute;
+    right: 30px;
+    top: 30px;
+    z-index: 111;
+    padding:10px;
+    box-shadow:2px 2px 5px #999;
+    background-color:#FFFFFF;
+    border-radius:2px;
+}
+.ty-chart-toobar img{
+	cursor:pointer;
+}
+.ty-chart-toobar>span{
+	margin:2px 4px;
+    border-left:1px dotted #ccc;
+    padding-left:6px;
+    position: relative;
+}
+.ty-chart-toobar>span:first-child{
+    border-left:0;
+}
+.ty-chart-toobar>span:hover{
+    cursor: pointer;
+}
+.ty-chart-toobar>span>img{
+    vertical-align: text-bottom;
+}

@@ -1,0 +1,19 @@
+<div class="{{treeSidebar}} ">
+	<!----机构树搜索区---->
+	<div class="insSearch">
+		<label class="fl">
+        <input class="text" id="searchOrganName" style="width:289px;" value="{{sessionScope.searchOrganName}}" placeholder="搜索机构..." />
+      </label>
+		<button class="btn xj-search-btn" onClick="queryOrgan();" id="leftSearchBtn"></button>
+	</div>
+	<!----机构树---->
+	<div id="box">
+		<div class="insSearchCont mt4" id="treeview">
+			<page-treeview></page-treeview>
+		</div>
+	</div>
+	<input type="hidden" value="{{sessionScope.organId}}" id="currentOrganId" />
+</div>
+<script>
+	
+</script>

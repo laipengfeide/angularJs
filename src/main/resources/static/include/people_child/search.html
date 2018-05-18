@@ -1,0 +1,43 @@
+<script>
+$(document).ready(function() {    
+	$("#organLevel").kendoComboBox().prev().find(".k-input").attr("readonly",true);
+
+});
+
+$("#searchKeyword").keydown(function(event) {  
+    if (event.keyCode == 13) {  
+    	PeopleManage.search(); 
+    }  
+});
+</script>
+<div class="contTitle">
+	<h2 class="font22 fl"><i class="icon"></i><span>{{headTitle}}</span><span class="font14">{{smallTitle}}</span></h2>
+	<div class="button font14 fl">
+		<a href="#" class="showWin" datatype="editInfo" id="btncreateGroup" onclick="PeopleManage.createGroup()"><i class="icon"></i> 新增</a>
+		<a href="#" id="btnImport" onclick="PeopleManage.importPeople()">人员上传</a>
+		<a href="#" id="btnOutPortPolice" onclick="PeopleManage.outPortPolice()">导出</a>
+	</div>
+	<div class="mSearch fr">
+		<input type="hidden" id="pageSize" name="pageSize" value="${query.pageSize}">
+		<input type="hidden" id="pageStart" name="pageStart" value="${query.pageNo}">
+		<ul>
+			<li><span>选择查询范围：</span>
+				<label>
+            <select id="organLevel" placeholder="请选择查询范围">
+              <option value="1">本级机构</option>
+			  <option value="2">本级机构与下级机构</option>
+            </select>
+          </label>
+			</li>
+			<li><span>快速查询：</span>
+				<label>
+	            	<input type="text" class="text" id="searchKeyword" name="searchKeyword" placeholder="姓名/用户名/人员编号" />
+	            </label>
+				<button id="textButton" class="btn" onclick="PeopleManage.search()"></button>
+			</li>
+		</ul>
+		<div class="more">
+			<a href="#" class="white">显示搜索</a>
+		</div>
+	</div>
+</div>

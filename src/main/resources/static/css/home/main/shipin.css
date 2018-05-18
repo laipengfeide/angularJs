@@ -1,0 +1,282 @@
+/* body{margin:0;padding:0; font-family:Arial, "微软雅黑", "宋体" !important;font-size:16px;} */
+.fl{float:left;}
+.fr{float:right;}
+.cl{clear:both;}
+.pd4{padding:4px;}
+.pt22{padding-top:22px;}
+.ml16{margin-left:16px;}
+.full{width:100%;}
+
+.ty-tcc-panel{width:452px;height:348px;background-color:#FFF;margin:0 auto;border:1px solid #CECECE; box-shadow:0 0 5px #CCC;border-radius:2px;}
+.ty-tcc-title{width:100%;height:30px;line-height:30px;color:#FFF;background-color:#1B8CF2;}
+.ty-tcc-title span{padding:0 10px;}
+.ty-shipin{float:left;border:1px solid #424F57;width:100%;height:100%;}
+.ty-sp-tools{width:100%;height:74px;background: #fff;margin-top: -31px;}
+.ty-btn{width:auto;height:28px;line-height:28px;font-size:13px;color:#FFF;background-color:#1B8CF2;padding:0 11px;border-radius:2px; cursor: pointer;margin-left:10px;}
+.ty-i-edit{float:left;width:14px;height:14px;background:url(../images/i1.png) no-repeat;display:block;margin:7px;}
+.ty-sp-icon{background:url(../images/sp.png) no-repeat 0 0 #FFF;display:block;}
+.sp-pause{float:left;width:30px;height:30px;background-position:-1px -2px;}
+.sp-pause:hover{background-position:-1px -34px;}
+.sp-play{float:left;width:30px;height:30px;background-position:-30px -2px;}
+.sp-play:hover{background-position:-31px -34px;}
+.sp-cut{float:left;width:30px;height:30px;background-position:-60px -2px;}
+.sp-cut:hover{background-position:-60px -34px;}
+.sp-stop{float:left;width:30px;height:30px;background-position:-90px -2px;}
+.sp-stop:hover{background-position:-90px -34px;}
+.ty-sp-zoom{float:left;width:80px;height:auto;margin-left:10px;}
+.sp-minus{float:left;width:30px;height:30px;background-position:-1px -68px;}
+.sp-minus:hover{background-position:-65px -68px;}
+.sp-plus{float:left;width:30px;height:30px;background-position:-31px -68px;}
+.sp-plus:hover{background-position:-94px -68px;}
+.sp-move{float:left;width:69px;height:69px;background-position:-122px -1px;position:relative;top:-18px;left:0;}
+.sp-move-left{width:22px;height:43px;position:absolute;top:11px;left:3px;display:block;}
+.sp-move-left:hover{background:url(../images/sp.png) no-repeat -320px -11px;}
+.sp-move-top{width:44px;height:22px;position:absolute;top:1px;left:12px;display:block;}
+.sp-move-top:hover{background:url(../images/sp.png) no-repeat -265px 0;}
+.sp-move-bottom{width:44px;height:22px;position:absolute;top:41px;left:13px;display:block;}
+.sp-move-bottom:hover{background:url(../images/sp.png) no-repeat -394px -41px;}
+.sp-move-right{width:22px;height:44px;position:absolute;top:12px;left:44px;display:block;}
+.sp-move-right:hover{background:url(../images/sp.png) no-repeat -233px -11px;}
+.sp-start{float:left;width:30px;height:30px;background-position:right -69px;}
+.sp-start:hover{background-position:-388px -70px;}
+
+
+.ty-sp-box{height:80px;width:400px;background-color:#353F4B;margin-top:-32px;}
+.ocx-icon{background:url(../images/tool.png) no-repeat;display:block;}
+.ty-sp-cat{
+
+}
+.ocx-play{
+	width:40px;
+	height:40px;
+	float:left;
+	cursor:pointer;
+	text-align:center;
+	margin: 15px 3px 3px;
+	background-position: -55px -17px;
+}
+.ocx-play:hover{
+	background-position: -55px -62px;
+}
+.ocx-capture{
+	width:40px;
+	height:40px;
+	float:left;
+	cursor:pointer;
+	text-align:center;
+	margin: 15px 0px 3px;
+	background-position: -143px -17px;
+}
+.ocx-capture:hover{
+	background-position: -142px -62px;
+}
+.ocx-single-screen{
+	width:28px;
+	height:28px;
+	float:right;
+	cursor:pointer;
+	text-align:center;
+	margin: 20px 3px 3px;
+	background-position: -308px -22px
+}
+.ocx-single-screen:hover{
+	background-position: -308px -68px
+}
+.ocx-four-screen{
+	width:28px;
+	height:28px;
+	float:right;
+	cursor:pointer;
+	text-align:center;
+	margin: 20px 3px 3px;
+	background-position: -342px -22px;
+}
+.ocx-four-screen:hover{
+	background-position: -342px -68px;
+}
+.ocx-full-screen{
+	width:28px;
+	height:28px;
+	float:right;
+	cursor:pointer;
+	text-align:center;
+	margin: 20px 3px 3px;
+	background-position: -275px -22px;
+}
+.ocx-full-screen:hover{
+	background-position: -277px -68px;
+}
+
+.ocx-pause{
+
+}
+.ocx-record{
+	width:40px;
+	height:40px;
+	float:left;
+	cursor:pointer;
+	margin: 15px 0px 3px;
+	text-align:center;
+	background-position: -185px -17px;
+}
+.ocx-record:hover{
+	background-position: -185px -62px;
+}
+.ocx-recording{
+	width:40px;
+	height:40px;
+	float:left;
+	cursor:pointer;
+	margin: 15px 0px 3px;
+	text-align:center;
+	background-position: -185px -62px;
+}
+
+.ocx-stop{
+	width:40px;
+	height:40px;
+	float:left;
+	cursor:pointer;
+	margin: 15px 1px 3px;
+	text-align:center;
+	background-position: -13px -17px;
+}
+.ocx-stop:hover{
+	background-position: -13px -62px;
+}
+.ocx-stop-all{
+	width:40px;
+	height:40px;
+	float:left;
+	margin: 15px 0px 3px;
+	cursor:pointer;
+	text-align:center;
+	background-position: -100px -17px;
+}
+.ocx-stop-all:hover{
+	background-position: -100px -62px;
+}
+
+.ocx-zoom-out{
+	width:28px;
+	height:28px;
+	float:right;
+	cursor:pointer;
+	text-align:center;
+	margin: 20px 3px 3px;
+	background-position: -374px -21px;
+}
+.ocx-zoom-out:hover{
+	width:28px;
+	height:28px;
+	float:right;
+	cursor:pointer;
+	text-align:center;
+	margin: 20px 3px 3px;
+	background-position: -374px -66px;
+}
+.ocx-zoom-in{
+	width:28px;
+	height:28px;
+	float:right;
+	cursor:pointer;
+	text-align:center;
+	margin: 20px 3px 3px;
+	background-position: -406px -20px;
+}
+.ocx-zoom-in:hover{
+	background-position: -407px -68px;
+}
+.ocx-pzx-control{
+	width:60px;
+	height:60px;
+	float:right;
+	margin-top: 5px;
+	margin-right: 5px;
+	cursor:pointer;
+	text-align:center;
+	background-position: -11px -120px;
+	position:relative;
+}
+.ocx-button-left{
+	width:16px;
+	height:60px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.ocx-button-left:hover{
+	width:20px;
+	height:60px;
+	background: url(../images/tool.png) no-repeat  -297px -120px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.ocx-button-right{
+	width:16px;
+	height:60px;
+	position:absolute;
+	top:0;
+	left:44px;
+}
+.ocx-button-right:hover{
+	width: 23px;
+	height: 60px;
+	background: url(../images/tool.png) no-repeat -193px -119px;
+	position: absolute;
+	top: 0;
+	left: 36px;
+}
+.ocx-button-top{
+	width:60px;
+	height:16px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.ocx-button-top:hover{
+	width:60px;
+	height:22px;
+	background: url(../images/tool.png) no-repeat  -85px -120px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.ocx-button-bottom{
+	width:60px;
+	height:16px;
+	position:absolute;
+	top:44px;
+	left:0;
+}
+.ocx-button-bottom:hover{
+	width: 60px;
+	height: 22px;
+	background: url(../images/tool.png) no-repeat -229px -156px;
+	position: absolute;
+	top: 36px;
+	left: 0;
+}
+.ocx-sound{
+	width:40px;
+	height:40px;
+	float:left;
+	cursor:pointer;
+	margin: 15px 0px 3px;
+	text-align:center;
+	background-position: -231px -17px;
+}
+.ocx-sound:hover{
+	background-position: -232px -62px;
+} 
+.ocx-sounding{
+	width:40px;
+	height:40px;
+	float:left;
+	cursor:pointer;
+	margin: 15px 0px 3px;
+	text-align:center;
+	background-position: -232px -62px;
+}
+

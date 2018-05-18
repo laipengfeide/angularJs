@@ -1,0 +1,107 @@
+/********************登录页面样式****************************/
+.fl{float:left;}
+.fr{float:right;}
+.fit{width:100%;}
+body{background: url(../images/login/bg_body.jpg) top center #0A2347;background-size:100%;}
+.login-header{
+    width:230px;height:auto;margin:0;padding:10px;box-sizing:border-box;
+    .downloadDiv {
+        width:330px; height:170px; display:none; color:#FFF; transform:translateY(0px); background:rgba(7,166,206,.4); top:39px; left:-230px; border:1px solid #0ECBF9; z-index:5;
+        &:before{content:"";width:98px;height:1px;font-size:1px;border-bottom:1px solid #19557A;position:absolute;top:-1px;right:0;display:none;}
+        .k-qrcode {width:112px; float:left; margin:20px 25px 10px;}
+        .fontDiv span {width:50%; float:left; text-align:center;}
+    }
+    >ul{
+        margin: 0;padding:0;
+        >li{position: relative;width: 100px;height: 36px;float: left;margin: 5px 5px 0 0;
+            a{
+                color: #20D4FF;position:absolute;width:100px;height: 100%;text-align:center;line-height:36px;background-color:rgba(7,166,206,.2);border: 1px solid #0ECBF9;border-radius:5px;z-index:5;
+                &:hover{color: #FFF;background-color: rgba(7,166,206,.4);}
+            }
+        }
+         .showDownload:hover a {
+            height:40px; border-bottom:none; background-color:#19557A; border-radius:5px 5px 0 0;
+            +.downloadDiv{display:block;
+                &:before{display:block;}
+            }
+        }
+    }
+}
+.login-panel{
+    width:1000px;height:600px;background:url(../images/login/bg_login.png) no-repeat center -35px;padding-top:114px;top:50%;left:50%;margin:-350px 0 0 -500px;
+    .logo {width: 150px;height: 150px;margin: -68px auto 0;display: table;}
+    .loginForm {width: 260px;height: auto;margin: 0 auto;
+        h1 {.fl;.fit;margin: 16px 0;font-weight: 500;-webkit-box-reflect: below 0 -webkit-linear-gradient(transparent,transparent 50%,rgba(255,255,255,.2));line-height: 1.1;width: 160%;margin-left: -30%;overflow: hidden;
+            >span{font-weight: 700;letter-spacing: 2px;white-space: nowrap;display: inline-block;}
+            &:hover>span{animation:lgmoveleft 0s !important;}
+        }
+        ul{.fl;.fit;
+            li {.fl;.fit;padding:5px 0; color:#0B5271;
+                label {position:relative; width:100%; margin-bottom:10px;
+                    .icon {position:absolute; width:20px; height:20px; margin:8px 0 0 8px; background-position:-150px 0;}
+                    .icon_user {background-position:-150px 0;}
+                    .icon_pass {background-position:-170px 0;}
+                }
+                .text {width:100%; height:36px; padding:5px 10px 5px 12%; color:#20D4FF; font-weight:100; line-height:24px; background:none; border:1px solid #0ECBF9;}
+                .icon_group span {text-transform :uppercase; font-weight:500;}
+                .button {
+                    width:200px; height:50px; padding-bottom:8px; letter-spacing:1px; text-align:center; line-height:42px; margin:10px auto 0; display:table; outline:none; border:none; color:#00B1DC; background:url("../images/login/bg_button.png") no-repeat center top;
+                    &:hover {color:#FFF;}    
+                }
+            }
+        }
+        .icon_group .icon {width:6px; height:6px; margin:5px 2px 0; background-color:rgba(7,166,206,.2);}
+        .icon_group .icon_left {.fl;}
+        .icon_group .icon_right {.fr;}
+        .icon_group .icon01 {animation: animation01 1s ease infinite;}
+        .icon_group .icon02 {animation: animation02 1s ease infinite;}
+        .icon_group .icon03 {animation: animation03 1s ease infinite;}
+        .login-txt{color:#0CA7CC;}
+    }
+}
+.wid118{width:118px !important;}
+.checkbox-wrap{width:100%;height:20px;}
+.verify-code{.fl;width:120px;height:36px;display:inline-block;margin-left:10px;}
+.login-checkbox{-webkit-appearance:none;-moz-appearance:normal;appearance:none;position: relative;width:15px;height:15px;background-color:#065E86;border:1px solid #0DA8D3;outline:0;border-radius:1px;top:-2px;margin-right:4px !important;}
+.login-checkbox:checked{background:url(../images/OK.png) no-repeat 0 3px #065E86;}
+.login-footer{
+    width:600px; height:85px; padding:10px 30px; bottom:10px; left:50%; background-color:rgba(7,166,206,.2); border:1px solid rgba(7,166,206,.5); border-radius:45px; margin-left:-300px; z-index:2;
+    div {width:25%; float:left; text-align:center;
+        a {width:100px; height:60px; display:inline-block; color:#0DB4DC;
+            &:hover {color:#FFF;}
+        }
+        .icon {width:40px; height:40px; cursor:pointer; transition:all .5s linear;}
+        .icon01 {background-position:-150px -20px;}
+        .icon02 {background-position:-190px -20px;}
+        .icon03 {background-position:-230px -20px;}
+        .icon04 {background-position:-270px -20px;}
+        a:hover .icon {transform:rotate(360deg);}
+        span{
+            .fl;
+            .fit;
+        }
+    }
+}
+
+@-webkit-keyframes animation01 { 30% {background-color:rgba(7,166,206,.8);} }
+@-webkit-keyframes animation02 { 60% {background-color:rgba(7,166,206,.8);} }
+@-webkit-keyframes animation03 { 90% {background-color:rgba(7,166,206,.8);} }
+@keyframes lgmoveleft{0%{transform:translateX(500px)}100%{transform:translateX(-500px)}}
+@media (max-width:1440px) {
+    .login {margin-top:-300px;}
+    .login-footer {height:40px; border-radius:20px; z-index:5;}
+    .login-footer div {
+        .icon {width:20px; height:20px; float:left; margin-right:5px;}
+        .icon01 {background-position:-190px 0;}
+        .icon02 {background-position:-210px 0;}
+        .icon03 {background-position:-230px 0;}
+        .icon04 {background-position:-250px 0;}
+        a {width:auto; height:auto; color:#0B7B9F;}
+        span {width:auto;}
+    }
+}
+/********************文本框placeholder的样式****************************/
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {color:#0CA7CC;}
+input:-moz-placeholder, textarea:-moz-placeholder {color:#0CA7CC;}
+input::-moz-placeholder, textarea::-moz-placeholder {color:#0CA7CC;}
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {color:#0CA7CC;}

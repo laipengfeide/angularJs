@@ -1,0 +1,18 @@
+<link rel="stylesheet" type="text/css" href="css/home/main/main.css"></link>
+
+<input type="hidden" value="${User.userId }"  id="userId"/>
+<input type="hidden" value="${User.organName }"  id="organName"/>
+<input type="hidden" value="${User.orgId }"  id="orgId"/>
+<div id="chartDiv" class="operation">
+
+</div>
+<script src="js/page/home/main/resource.js" type='text/javascript'></script>
+<script src="js/page/home/main/chart_toobar.js"></script>
+<script src="js/page/home/main/dbin.js"></script>
+<script src="js/page/home/main/list.js"></script>
+<script src="js/page/home/main/alarmDevice.js"></script>
+
+<input type="hidden" id="eventId" value="${requestScope.eventId}">
+<page-video></page-video>
+<page-common></page-common>
+<page-trail></page-trail>

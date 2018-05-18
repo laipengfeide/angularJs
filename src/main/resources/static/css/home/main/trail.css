@@ -1,0 +1,161 @@
+@charset "utf-8";
+
+.ui-play-box-trail {
+	z-index:9999;
+	width: 400px;
+	height: 32px;
+	margin: 0 auto;
+	background: url(images/bg1.png);
+	border-radius: 10px;
+	padding: 20px 10px;
+	position: absolute;
+	bottom: 10px;
+	left: 50%;
+	display: none;
+	filter: Alpha(Opacity =   90);
+	-moz-opacity: 0.9;
+	opacity: 0.9;
+}
+
+.ui-play-tools-trail {
+	width: 100%;
+	height: 10px;
+	margin: 0 auto;
+	background: url(images/play-bg.png) repeat-x;
+	position: relative;
+}
+
+.ui-play-tools-left-trail {
+	float: left;
+	width: 10px;
+	height: 10px;
+	background: url(images/play1.png) no-repeat;
+	display: block;
+}
+
+.ui-play-tools-right-trail {
+	float: right;
+	width: 10px;
+	height: 10px;
+	background: url(images/play2.png) no-repeat;
+	display: block;
+}
+
+.ui-play-lump-trail {
+	width: 15px;
+	height: 15px;
+	background: url(images/play3.png) no-repeat;
+	position: absolute;
+	top: -3px;
+	left: 0;
+}
+
+.ui-play-menu-trail{
+	width: 100%;
+	height: 30px;
+	margin: 0 auto;
+	margin-top: 10px;
+	text-align: center;
+}
+
+.ui-play-back-trail {
+	width: 26px;
+	height: 26px;
+	background: url(images/play.png) no-repeat -256px -59px;
+	border: 0;
+	margin-left: 10px;
+}
+
+.ui-play-btn-trail {
+	width: 26px;
+	height: 26px;
+	background: url(images/play.png) no-repeat -61px -59px;
+	border: 0;
+	margin-left: 10px;
+}
+
+.ui-play-stop-trail {
+	width: 26px;
+	height: 26px;
+	background: url(images/play.png) no-repeat -61px -18px;
+	border: 0;
+	margin-left: 10px;
+}
+
+.ui-play-speed-trail {
+	width: 26px;
+	height: 26px;
+	background: url(images/play.png) no-repeat -207px -18px;
+	border: 0;
+	margin-left: 10px;
+}
+
+.ui-play-pause-trail {
+	width: 26px;
+	height: 26px;
+	background: url(images/play.png) no-repeat -256px -18px;
+	border: 0;
+	margin-left: 10px;
+}
+
+.uptl-txt-trail {
+	float: left;
+	width: auto;
+	height: 20px;
+	font-size: 12px;
+	color: #333;
+	position: absolute;
+	top: 10px;
+	left: -5px;
+}
+
+.uptr-txt-trail {
+	float: right;
+	width: auto;
+	height: 20px;
+	font-size: 12px;
+	color: #333;
+	position: absolute;
+	top: 10px;
+	right: -5px;
+}
+
+.ui-play-now-trail {
+	float: left;
+	width: auto;
+	height: 20px;
+	font-size: 12px;
+	color: #333;
+	position: absolute;
+	top: 30px;
+	left: -5px;
+}
+
+.ui-play-tishi-trail {
+	float: right;
+	width: auto;
+	height: 20px;
+	font-size: 12px;
+	color: #333;
+	position: absolute;
+	top: 30px;
+	right: -5px;
+}
+
+.trail-close{
+	 text-align:center;
+	 cursor:pointer;
+	 width:20px;
+	 height:20px;
+	 font-size:17px;
+	 position:absolute;
+	 top:0px;right:4px;
+	 color:gray;
+	 display:block;
+}
+.trail-close:hover{
+	background:#5151F1;
+	text-decoration: none;
+	border-radius:10px;
+	color:white;
+}

@@ -1,0 +1,18 @@
+<script src="../../js/libs/bootstrap-table-locale-all.min.js"></script>
+<div class="mainCont posA">
+	<div ng-include="'include/people_child/search.html'"></div>
+	<page-tree></page-tree>
+	<people-listinfo></people-listinfo>
+<!--
+	<%@ include file="peopleSearch.jsp"%>
+  	<%@ include file="../../left.jsp" %>
+	<%@ include file="peopleListInfo.jsp"%>
+-->
+</div>
+<script>
+	$(document).ready(function() {
+	    $(".addButton").kendoButton({
+	        spriteCssClass: "k-icon k-add"
+	    });
+	});
+</script>

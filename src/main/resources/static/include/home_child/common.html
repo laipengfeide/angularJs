@@ -1,0 +1,142 @@
+<script>
+  var popedomManager={
+  		/**
+  		 * 加载辖区社区上图
+  		 */
+  		initAreaResource:function(){
+  			popedomManager.setMapCenter();
+  		},
+
+      setMapCenter:function () {
+          $.ajax({
+              url:"<%=basePath%>web/organx/getOrganById.do",
+              type:"post",
+              dataType:"json",
+              success:function(msg){
+                  if(msg.code == 200){
+                      if(msg.data != null){
+                          var cenEn=new MapEntity();
+                          if(msg.data.centerX && msg.data.centerX !="0.0"){
+                              cenEn.latitude=msg.data.centerY;
+                              cenEn.longitude=msg.data.centerX;
+                          }else {
+                              cenEn.latitude=mapCenLat;
+                              cenEn.longitude=mapCenLon;
+                          }
+                          if(msg.data.zoom){
+                              cenEn.zoom=msg.data.zoom;
+                          }else{
+                              cenEn.zoom=mapZoom;
+                          }
+                          currentNode = MapToobar.getCurrentNode(cenEn.zoom);
+                          setTimeout(function(){
+                        	  MapManager.setCenter(cenEn);
+                          },1000);
+                      }
+                  }
+              }
+          });
+      },
+
+		 /**
+			获取辖区状态
+		*/
+		getPopedomList:function(type){
+			var data;
+			if(type == 6){
+				data = {
+					organIds:$("#organId").val(),
+					areaType:1
+				}
+			}else if(type == 8){
+				data = {
+					organIds:$("#organId").val(),
+					areaType:3
+				}
+			}
+			$.ajax({
+				url:"<%=basePath%>area/queryAreaList.do",
+				type:"post",
+				dataType:"json",
+				data:data,
+				success:function(msg){
+					if(msg.code == 200){
+						if(msg.data != null){
+							for(var i =0;i<msg.data.length;i++){
+								var datasource = msg.data[i];
+								if(datasource.displayProperty){
+									var cenEn=new MapEntity();
+		   							cenEn.latitude=datasource.displayProperty.y;
+		   							cenEn.longitude=datasource.displayProperty.x;
+		   							cenEn.zoom=datasource.cuZoom;
+		   						 	MapManager.setCenter(cenEn);
+									if((type == 8 && datasource.isShow == "1") || type == 6){
+										//辖区上图
+			   							popedomManager.loadPolygon(datasource,type);
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+		},
+		 /**
+		 * 点击辖区、社区上图
+		 * @param obj
+		 * @param ver
+		 */
+		loadPolygon:function(obj,type){
+			var mapProperty = obj.mapProperty;
+			if(!mapProperty || mapProperty.length == 0) return;
+			var displayProperty = obj.displayProperty;
+			// 组装圈层各个顶点
+			//面数据
+			var points = [];
+			for(var i= 0,len=mapProperty.length;i<len;i++){
+				points.push([mapProperty[i].x,mapProperty[i].y]);
+			}
+			var en = new MapEntity();
+		    en.id = obj.id;
+		    en.type = type;
+		    en.layerName = "vectorLayer";
+		    en.name = obj.areaName;
+		    en.pointDatas = points;
+		
+			// 组装圈层样式
+		    var mystyle = new Object();
+		    var enTitle = new MapEntity();
+		     if(displayProperty){
+		    	enTitle.longitude = displayProperty.x;
+		    	enTitle.latitude = displayProperty.y;
+		    	if(displayProperty.borderColor !=  ""){
+		    		mystyle.color = mystyle. strokeColor = displayProperty.borderColor;
+		    	}
+		    	if(displayProperty.borderOpacity != null){
+		    		mystyle.strokeOpacity = displayProperty.borderOpacity;
+		    	}
+		    	if(displayProperty.fillColor != ""){
+		    		mystyle.fillcolor = mystyle. fillColor = displayProperty.fillColor;
+		    	}
+		    	if(displayProperty.fillOpacity != null){
+		    		mystyle.opacity = mystyle. fillOpacity = displayProperty.fillOpacity;
+		    	}
+		    }
+		    
+		  	mystyle.strokeWidth = 3;
+			mystyle.pointRadius = 6;
+			
+			en.style = mystyle;
+		    // 生成圈层
+			MapManager.clearOverlayByIdType(en);
+			polygon_final = MapManager.createPolygon(en);
+		    //生成圈层名称
+		    enTitle.id = obj.id;
+		    enTitle.type = "title"+type;
+		    enTitle.layerName = "vectorLayer";
+		    enTitle.name = obj.areaName;
+		    MapManager.clearOverlayByIdType(enTitle);
+		    MapManager.createTitle(enTitle);
+		}
+	}
+</script>

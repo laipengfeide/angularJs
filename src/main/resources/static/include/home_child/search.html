@@ -1,0 +1,616 @@
+
+<input id="rootNode" value="{{isRootNode}}" type="hidden" />
+<div class="mapSearch posA" id="mapStart">
+	<label class="fl"> <input type="text" class="text" id="searchVal" value="" placeholder="搜索..." />
+	</label> <span class="btn icon hand fl" id="searchBtn" onclick="ListManager.searchVal()"></span>
+</div>
+<div ng-if="isRootNode == 1" class='fl cg-left-tree' id='cg-left-tree' style='position:absolute;left:23px;top:60px;z-index:9999;'>
+	<page-tree></page-tree>
+</div>
+
+<div id="template" class="xjbj-toolbar">
+	<div class="fr set-hei48 hear-bar-div">
+		<page-charttoobar></page-charttoobar>
+		<div id="resourcePanel" class="xj-box-right hide">
+			<div class="ty-list-type" id="list-type">
+				<span id="titlePolice" onclick="ListManager.initDatasByType(this,4)"
+					class="list-span-current">人员</span> <span id="titleVideo" onclick="ListManager.initDatasByType(this,1)">视频</span> <span onclick="ListManager.initDatasByType(this,5.2)">设备</span>
+			</div>
+			<div id='resourceTitle' class="ty-dct-title hidden">
+				<span id='titlePolice' onclick="ListManager.initDatasByType(this,4)">
+					<li style="padding-top:5px;">人员</li> <!-- <li><i id='zfOnlineId'></i>/<i id='zfDutyId'></i></li> -->
+				</span> <span id="titleCamera"
+					onclick="ListManager.initDatasByType(this,1)">
+					<li style="padding-top:5px;">视频</li> <!-- <li><i id='GBOnlineId'></i></li> -->
+				</span> <span id="titleSHDW" class="hidden"
+					onclick="ListManager.initDatasByType(this,5.2)">
+					<li style="padding-top:5px;">设备</li> <!-- <li><i id='SHOnlineId'></i></li> -->
+				</span>
+			</div>
+			<div class="seachClass" id="seachClass-div" style="margin-top:11px;">
+
+			</div>
+			<div id="resourceGroupBox" class="resourceGroupBox"></div>
+		</div>
+
+		<div class="dbinBox hidden" id="dbinBox"></div>
+
+		<div id="imagesPanel" class='xj-left-tab' style='height:190px;display:none;position:absolute;top:60px;z-index:9999;'>
+			<div class="xj-left-panel" style="width:345px;">
+				<span class="xj-left-panel-close" title="关闭" onclick="closeImageDisplayWindow();">×</span>
+				<div class="fl xj-left-box">
+					<div class="cg-ri-photo">
+						<div class="cg-riph-left">
+							<i></i>
+						</div>
+						<div class="cg-riph-main" id="cgPhoto">
+							<ul>
+							</ul>
+						</div>
+						<div class="cg-riph-right">
+							<i></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input id="fileSize" type="hidden" style="width:100px;height:50px;">
+			<div id="alarmImgShow" class="xj-left-panel-show hidden">
+				<img class="cursor" onclick="alarmImgClose(this)">
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		initEventAndHtml();
+		showleftTree(0);
+		showResourcePanel(0);
+        var searchInfo = JSON.parse($.cookie("searchInfo"));
+        if(searchInfo && searchInfo.gridSearch){
+           $('#searchVal').val(searchInfo.gridSearch)
+		}
+		
+	});
+
+    function alarmImgClose(obj){
+        $(obj).parent().addClass("hidden");
+    }
+    function buildEscapeeFile(id, url){
+        var picUrl =  url;
+        $("#alarmImgShow img").attr("src", picUrl);
+        $("#alarmImgShow").removeClass("hidden");
+        $("#alarmImgShow").css("left","450px");
+        $("#alarmImgShow img").css("width","240px");
+        $("#alarmImgShow img").css("height","180px");
+        $('#imagesPanel .xj-left-panel').hide();
+        $('#imagesPanel').removeClass('xj-left-tab');
+    }
+    function displayEscapeeImg(){
+        $("#imagesPanel").show();
+        $("#cgPhoto ul").html("");
+        buildEscapeeFile("cgPhoto",$("#carAlarm").prop("src"));
+    }
+    /**
+    * 点击显示大图片
+    */
+    function alarmImgShowOnly(obj){
+    	$("#imagesPanel").show();
+        $("#cgPhoto ul").html("");
+        var url = basePath+"uploadFile"+obj
+        buildEscapeeFile("cgPhoto",url);
+    }
+	/**
+	 * 初始化事件和html样式
+	 */
+	var initEventAndHtml = function(){
+		//setH();
+		
+		//搜索
+  		var inputStr = "";
+		$("#searchVal").keyup(function(){
+			var searchStr = $.trim($("#searchVal").val());
+			if(inputStr != searchStr){
+				inputStr = searchStr;
+ 				ListManager.searchVal();
+ 			}
+		}).click(function(){
+			showleftTree(1);
+			showResourcePanel(1);
+		});
+		ResourceDatas.OpretePoliceFlag = true;
+	}
+	//#cg-left-tree显示隐藏
+	function showleftTree(flag){
+		if(flag == 1){
+			$("#cg-left-tree").slideDown('fast');
+		}else{
+			$("#cg-left-tree").slideUp('fast');
+		}
+		$("#treeview").css("height",480);
+		$(document).on("mouseup",clickOtherPanel);
+	}
+	//#resourcePanel显示隐藏
+	function showResourcePanel(flag){
+		if(flag == 1){
+			$("#resourcePanel").slideDown('fast');
+		}else{
+			$("#resourcePanel").slideUp('fast');
+		}
+		$(document).on("mouseup",clickOtherPanel);
+	}
+	//点击其他区域隐藏指定元素
+	function clickOtherPanel(e){
+		if($(e.target).parents('#mapStart,#cg-left-tree,#resourcePanel,.k-calendar-container,#imagesPanel,#chartDiv,#videomain,.k-window').length == 0){
+			$("#cg-left-tree").slideUp('fast');
+			$("#resourcePanel").slideUp('fast');	
+		}
+	}
+	/**
+     * 获取分组信息列表
+     * 初始化数据源
+     */
+    var resPoliceGroupRequest = function(){
+    	/* $.ajax({
+    		url:basePath + "cg_duty/getPoliceGroupList.do",
+    		type:"post",
+    		data:{
+    			organId:$("#organId").val()
+    		},
+    		dataType:"json"
+    	}).done(function(msg){
+    		/**
+ 			 * 根据分组列表组建数据源
+ 			 * @data 分组列表
+    		 **/
+    		ListManager.initPGroupDatas(msg.data);
+    		tempType = 4;
+    		trailManager.curTempDatas = ResourceDatas.PGroupDatas;
+    	}).done(function(){
+    		ListManager.buildAndChcekDatas(ResourceDatas.PGroupDatas,true);
+    		//组建导航条checkbox
+    		//ListManager.buildNavCheck(tempType);
+    		//组建分组列表信息
+    		setTimeout(function(){
+    			ListManager.buildGroupHtml(tempType);
+    		},700);
+    	}); */
+    }
+	 /**
+     * 获取天网分组信息列表
+     * 初始化天网数据源
+     */
+    var resGBGroupRequest = function(type,callback){
+    	var orgCode = $.trim($("#organPath").val());
+	    if(orgCode != ""){
+	    	var orgs = orgCode.split("/");
+	    	orgCode = orgs[orgs.length - 1];
+	    }
+		 var sourceType ;
+		 if(type == 1.2){
+			 sourceType = 2;
+		 }else{
+			 sourceType = 1;
+		 }
+    	/*   */
+    }
+	 /** 
+     * 初始化天网列表数据
+     */
+    var initGBGroupDatas = function(data,type){
+		var group = data;
+		if(!ResourceDatas.datas[type]){return;}
+    	var gbdata = ResourceDatas.datas[type].data;
+    	var nogroupIds = {},nogorupDatas = {},GBTotalCount = 0;
+    	//声明未分组信息
+		var nogroup = {
+			id:"nogroup",
+			name:"未分组",
+			deviceCount:0
+		};
+    	for(var i =0;i<group.length;i++){
+    		var gbObj = {};
+   			for(var j in gbdata){
+   				if(gbdata[j].deviceGroupId){
+   					if( gbdata[j].deviceGroupId == group[i].id){
+   						gbObj[gbdata[j].id] = gbdata[j];
+   						GBTotalCount ++;
+   					}
+   				}else{
+   					var naming = gbdata[j].detailInfo.naming;//警员id
+					//如果已经存在警员id ，则不添加
+					if(!nogroupIds[naming]){
+						nogroupIds[naming] = gbdata[j];
+						nogorupDatas[gbdata[j].id] = gbdata[j];
+						nogroup.deviceCount ++;
+						GBTotalCount ++;
+					}
+   				}
+   			}
+   			var groupObj = {};
+   			groupObj.GBDatas = gbObj;
+   			groupObj.pgdata = group[i];
+   			if(type == 1){
+   				ResourceDatas.GBGroupDatas[group[i].id] = groupObj;
+   			}else{
+   				ResourceDatas.SHDWGroupDatas[group[i].id] = groupObj;
+   			}
+    	}
+    	//------------------------------处理未分组人员-----------------------------------
+    	if(group.length == 0){
+    		for(var j in gbdata){
+    			var naming = gbdata[j].detailInfo.naming;//警员id
+    			//如果已经存在警员id ，则不添加
+    			if(!nogroupIds[naming]){
+    				nogroupIds[naming] = gbdata[j];
+    				nogorupDatas[gbdata[j].id] = gbdata[j];
+    				nogroup.deviceCount ++;
+    				GBTotalCount ++;
+    			}
+    		}
+    	}
+		var nogroupObj = {};
+		nogroupObj.GBDatas = nogorupDatas;
+		nogroupObj.pgdata = nogroup;
+		//给数据源赋值
+		if(type == 1){
+			ResourceDatas.GBGroupDatas[nogroup.id] = nogroupObj;
+			$("#GBOnlineId").html(GBTotalCount);
+		}else{
+			ResourceDatas.SHDWGroupDatas[nogroup.id] = nogroupObj;
+			$("#SHOnlineId").html(GBTotalCount);
+		}
+		nogroupIds = {};
+		nogorupDatas = {};
+    }
+	/**
+	 * 警员上线
+	 * 刷新数量和列表
+	 * @param gpsId
+	 */
+	var refreshOnLineNum = function(gpsId){
+   	   //2、由于gpsId多次推送，相同的推送一次后就不再变更列表
+		if(trailManager.isGpsAndNum[gpsId] == true){
+			return;
+		}
+		trailManager.isGpsAndNum[gpsId] = true;
+		//3、 gps推送 改变状态
+		EachDatasByGps(gpsId,2);
+	}
+	/**
+	 * 警员下线
+	 * 刷新数量和列表
+	 * @param gpsId
+	 */
+	var refreshOffLineNum = function(gpsId){
+		if(trailManager.isGpsAndNum[gpsId] == false){
+			return;
+		}
+		trailManager.isGpsAndNum[gpsId] = false;
+	    //gps推送 改变状态
+	   	EachDatasByGps(gpsId,1);
+	}
+	/**
+	 * gps推送 改变状态
+	 * @param gpsId 
+	 * @param lineFlag 当前执行操作的状态 1下线操作;2上线操作
+	 */
+	var EachDatasByGps = function(gpsId,lineFlag){
+		//conMark 用于判断警员在线状态   1为下线标识,2为上线标识
+		//valNum  用于改变警员状态与conMark相反。
+		var conMark,valNum;
+	   	if(lineFlag == 1){conMark = 2;valNum = 1;}
+	   	else{conMark = 1;valNum = 2;}
+		//遍历数据源
+		d:for(var j in ResourceDatas.PGroupDatas){
+			var curGroupObj = ResourceDatas.PGroupDatas[j];
+			var len = curGroupObj.pgArray.length;
+			for(var i = 0;i<len; i++){
+				var typeId = "";
+			 	if(curGroupObj.pgArray[i].data.gpsId == gpsId && curGroupObj.pgArray[i].isOnLine == conMark){
+					curGroupObj.pgArray[i].isOnLine = valNum;
+					//3、改变总数量
+					changeGpsNum(typeId,curGroupObj,gpsId,valNum);
+				 	break d;//跳出分组验证。
+				}
+			}
+		}
+	}
+	/**
+  	 * 改变gps在线下线数量
+  	 * @param typeId 当前人员的类型id
+  	 * @param curGroupObj  当前分组对象
+  	 * @param gpsId  
+  	 * @param gpsType 上下线类型。1不在线;2在线 
+	 */
+	var changeGpsNum = function(typeId,curGroupObj,gpsId,gpsType){
+		var curgId = curGroupObj.pgdata.id;//当前分组id
+		//5、变更图标
+		if(gpsType == 2){//在线
+			var curOffline = $(".duty-offline #"+gpsId);
+			var img = MapHandler.getImgUrl(4.11);
+			curOffline.find("img").attr('src',img);
+			$("#re-group-body"+curgId+" .duty-online").append(curOffline);
+		}else{
+			var curOffline = $(".duty-online #"+gpsId);
+			var img = MapHandler.getImgUrl(4.12);
+			curOffline.find("img").attr('src',img);
+			$("#re-group-body"+curgId+" .duty-offline").append(curOffline);
+		}
+	}
+	</script>
+<style type="text/css">
+.hear-bar-div {
+	margin-right: 20px;
+	margin-bottom: 20px;
+	width: 100%;
+	position: absolute;
+}
+
+.seachClass {
+	text-align: center;
+	margin: 5px;
+}
+
+.dbinBox {
+	position: absolute;
+	left: 480px;
+	z-index: 99;
+	top: 130px;
+	height: 60px;
+	line-height: 40px;
+	width: auto;
+	background-color: rgba(238, 244, 247, 0.6);
+	border: 1px solid gray;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	padding-right: 5px;
+	border-top: none;
+}
+
+.dbinBox img {
+	margin-left: 18px;
+	cursor: pointer;
+	width: 22px;
+	height: 22px;
+}
+/* 警情框处理 */
+/* 警情框处理 */
+.first-tr {
+	
+}
+
+.alarm-button1 {
+	float: right;
+	margin-right: 5px;
+	height: 25px;
+	width: 60px;
+	margin-top: 5px;
+	font-size: 12px;
+	margin-bottom: 5px;
+	color: #fff;
+	border-radius: 2px;
+	background-color: #4badd0;
+	border: none;
+}
+
+.alarm-button2 {
+	float: right;
+	margin-right: 5px;
+	height: 25px;
+	width: 40px;
+	margin-top: 5px;
+	font-size: 12px;
+	margin-bottom: 5px;
+	color: #fff;
+	border-radius: 2px;
+	background-color: #4badd0;
+	border: none;
+}
+
+.alarm-button2:hover {
+	color: #fff;
+	background-color: #4bd0bc;
+}
+
+.alarm-button-detail:hover {
+	color: #fff;
+	background-color: #51a351;
+}
+
+.position {
+	height: 26px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.alarm-button-detail {
+	float: right;
+	margin-right: 15px;
+	height: 25px;
+	width: 60px;
+	margin-top: 5px;
+	font-size: 6px;
+	border-radius: 2px;
+	margin-bottom: 5px;
+	color: #fff;
+	background-color: #4badd0;
+	border: none;
+}
+
+.alarm-button-detail:hover {
+	color: #fff;
+	background-color: #4bd0bc;
+}
+
+.alarm-button1:hover {
+	color: #fff;
+	background-color: #4bd0bc;
+}
+
+.detailInfo {
+	margin-top: 15px;
+}
+
+.detailInfo-first {
+	margin-top: 25px;
+}
+
+/* 资源列表分组显示  */
+.resourceGroupBox {
+	width: 100%;
+	height: 507px;
+	background-color: #094165;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+.gb-title {
+	margin-left: 15px;
+	height: 40px;
+	border-bottom: 1px solid #EDF1F2;
+	line-height: 40px;
+}
+
+.gb-title-icon {
+	background-image: url('../base/map/res/images/gb-refresh.png');
+	background-repeat: no-repeat;
+	float: right;
+	margin-right: 30px;
+	height: 17px;
+	width: 18px;
+	margin-top: 13px;
+}
+
+.gb-title-button1 {
+	float: right;
+	margin-right: 6px;
+	height: 25px;
+	line-height:25px;
+	width: 40px;
+	margin-top: 6px;
+	font-size: 6px;
+	background-color: rgb(75, 173, 208);
+	border: none;
+	color: #fff;
+}
+
+.gb-title-button1:hover {
+	color: white;
+	background-color: #4bd0bc;
+}
+
+.gb-title-button2 {
+	float: right;
+	margin-right: 14px;
+	height: 25px;
+	line-height:25px;
+	width: 40px;
+	margin-top: 6px;
+	font-size: 6px;
+	background-color: rgb(75, 173, 208);
+	border: none;
+	color: #fff;
+}
+
+.gb-title-button2:hover {
+	color: white;
+	background-color: #4bd0bc;
+}
+
+.gb-title {
+	color: #FFF;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.re-group {
+	width: 98%;
+	min-height: 30px;
+	background-color: #094165;
+	margin-top: 1px;
+	border-bottom: 1px solid #0B7EA2;
+}
+
+.re-group-header {
+	height: 30px;
+	font-size: 14px;
+	background-color: transparent;
+	line-height: 30px;
+	background-repeat: no-repeat;
+	background-position: 5%;
+}
+
+.re-group-header span {
+	margin-left: 8px;
+}
+
+.re-group-body {
+	height: auto;
+}
+
+.duty-online {
+	
+}
+
+.duty-online span {
+	margin-left: 28px;
+}
+
+.duty-offline {
+	
+}
+
+.duty-offline span {
+	margin-left: 28px;
+}
+
+.p-box {
+	border-bottom: 1px solid #0B7EA2;
+	padding-left:2px;
+	clear: both;
+}
+
+.ty-list-device:hover {
+	background-color: #08597D;
+}
+
+.p-img {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
+.p-name {
+	font-size: 15px;
+	display: inline-block;
+	margin-bottom: 9px;
+}
+
+.p-area {
+	margin-bottom: 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 60px;
+}
+
+.g-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 170px;
+	line-height:24px;
+	display: inline-block;
+}
+
+.d-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 98%;
+	display: inline-block;
+	margin-left: 11px;
+	font-size: 15px;
+}
+</style>
+

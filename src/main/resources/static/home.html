@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>一键报警3.0系统 - 首页</title>
+		<script data-main="js/require-page/home" src="js/libs/require.js"></script>
+	</head>
+	<body ng-app="decorator">
+		<div ng-controller="homeController">
+			<header>
+				<div class="head posR">
+				  <div class="link fr">
+				  	<span class="fl"><i class="icon icon01"></i><label class="xj-header-user white" title="{{User.userName }}">{{ User.userName }}</label></span>
+				  	<div class="fr mr20">
+				  		<span><a href="javaScript:void(0);" onclick="window.location.href='<%=path %>/videoPicPath/gotoPath.action';" class="showWin" datatype="editPass"><i class="icon icon02"></i>修改密码</a></span>
+				  		<span><a href="javaScript:viod(0);" onclick="window.location.href='<%=path %>/admin/logout.do'"><i class="icon icon03"></i>退出</a></span>
+				  	</div>
+				  </div>
+				  <div class="posA"></div>
+				  <div id="videoPicPath"></div>
+				</div>
+			</header>
+			<article>
+				<div class="content">
+					<section class="sidebar">
+						<div ng-include="'include/left.html'"></div>
+					</section>
+					<div class="main posR" style="height: 939px;">
+						<div ui-view class="fit full"></div>
+						<div class="corner mapTopLeft"></div>
+						<div class="corner mapTopRight"></div>
+						<div class="corner mapBottomLeft"></div>
+						<div class="corner mapBottomRight"></div>
+					</div>
+				</div>
+			</article>
+		</div>
+	</body>
+</html>
